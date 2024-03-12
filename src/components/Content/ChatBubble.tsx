@@ -1,5 +1,5 @@
-import { StyledDiv } from "./StyledDiv";
-import { StyledText } from "./StyledText";
+import { StyledDiv } from "../common/StyledDiv";
+import { StyledText } from "../common/StyledText";
 
 type ChatBubbleProps = {
   isUser?: boolean;

@@ -1,12 +1,24 @@
-import { ChatBubble } from "../common/ChatBubble";
-import { StyledDiv } from "../common/StyledDiv";
+import { useState } from "react";
 
-export const Content = () => (
-  <StyledDiv width="300px" height="400px">
-    <ChatBubble
-      content="Hi, CWN Model! Nice to meet you, my name is lily and i am blind so i need lots of help navigating the web"
-      isUser
-    />
-    <ChatBubble content="Hi, user!" />
-  </StyledDiv>
-);
+import { ChatMessage } from "../../types";
+import { StyledDiv } from "../common/StyledDiv";
+import { InputField } from "./InputField";
+import { MessageHistory } from "./MessageHistory";
+
+export const Content = () => {
+  const [history, setHistory] = useState<ChatMessage[]>([]);
+
+  return (
+    <StyledDiv
+      width="300px"
+      height="400px"
+      display="flex"
+      flexDirection="column"
+      px="4px"
+      pb="4px"
+    >
+      <MessageHistory history={history} />
+      <InputField history={history} setHistory={setHistory} />
+    </StyledDiv>
+  );
+};
