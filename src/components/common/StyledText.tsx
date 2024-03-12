@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from "styled-components";
 import {
   color,
   type ColorProps,
@@ -10,7 +10,7 @@ import {
   type SpaceProps,
   typography,
   type TypographyProps,
-} from 'styled-system';
+} from "styled-system";
 
 export type TextVariant = "title";
 
@@ -30,6 +30,7 @@ export const StyledText = styled.text<StyledTextProps>`
           font-size: 18px;
           line-height: 38px;
           font-weight: bold;
+          padding-bottom: 15px;
         `;
     }
   }}
