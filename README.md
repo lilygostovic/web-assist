@@ -1,4 +1,4 @@
-A simple Hello World Chrome extension using React. 
+An innovative browser extension designed to enable users to converse with Large Language Models (LLMs) towards accomplishing real-world tasks within web browsers.
 
 # Getting Started with Create React App
 
