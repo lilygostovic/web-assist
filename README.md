@@ -1,21 +1,23 @@
 An innovative browser extension designed to enable users to converse with Large Language Models (LLMs) towards accomplishing real-world tasks within web browsers.
 
-# Getting Started with Create React App
+# Running locally
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Clone this repo to your local machine `git clone https://github.com/lilygostovic/web-assist.git`
 
-## Available Scripts
+Run `npm install` to install all dependencies.
 
-In the project directory, you can run:
+Run `npm run build` to create the **dist** folder.
 
-### `npm run build`
-bundle the extension.
+Open Chrome and open [chrome://extensions/](chrome://extensions/).
 
-### `npm run watch`
-bundle the extension with interactive watch mode.
+Enable Developer mode in the top right corner, then click the **Load unpacked** button.
 
-## Learn More
+Upload **dist** folder, now you can run the extension locally. 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Helpful Tips
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Pin the extension in your browser for ease of access.
+
+Create a keyboard shortcut to open the extension:
+    - Click **Keyboard shortcuts**
+    - Under WebAssist, under **Activate the extension**, click on the edit button and key in the shortcut you would like to activate the extension (ex. ⌘A)
