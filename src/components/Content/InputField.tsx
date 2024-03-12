@@ -20,7 +20,6 @@ export const InputField = ({ history, setHistory }: InputFieldProps) => {
     };
 
     setHistory([...history, newMessage]);
-
     setText("");
   };
 
