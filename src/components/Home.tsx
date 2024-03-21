@@ -9,8 +9,8 @@ export const Header = () => (
 );
 
 export const HomePage = () => (
-  <div>
+  <>
     <Header />
     <Content />
-  </div>
+  </>
 );
