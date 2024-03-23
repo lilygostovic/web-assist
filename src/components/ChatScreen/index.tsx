@@ -1,5 +1,8 @@
-import { StyledDiv, StyledText } from "../common";
-import { Content } from "./Content";
+import {
+  StyledDiv,
+  StyledText,
+} from '../common';
+import { Content } from './Content';
 
 export const Header = () => (
   <StyledDiv display="flex" justifyContent="center">
@@ -7,7 +10,7 @@ export const Header = () => (
   </StyledDiv>
 );
 
-export const ChatPage = () => (
+export const ChatScreen = () => (
   <StyledDiv height="100%" width="100%">
     <Header />
     <Content />

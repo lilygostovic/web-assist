@@ -1,3 +1,3 @@
 export { StyledDiv, StyledText } from "./common";
-export { ChatPage } from "./ChatPage";
-export { WelcomePage } from "./WelcomePage";
+export { ChatScreen } from "./ChatScreen";
+export { WelcomeScreen } from "./WelcomeScreen";

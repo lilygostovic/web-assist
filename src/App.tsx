@@ -1,9 +1,9 @@
-import { StyledDiv, WelcomePage } from "./components";
+import { StyledDiv, WelcomeScreen } from "./components";
 
 function App() {
   return (
     <StyledDiv width="300px" height="400px">
-      <WelcomePage />
+      <WelcomeScreen />
     </StyledDiv>
   );
 }
