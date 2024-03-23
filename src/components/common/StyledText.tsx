@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
 import {
   color,
   type ColorProps,
@@ -10,9 +10,9 @@ import {
   type SpaceProps,
   typography,
   type TypographyProps,
-} from "styled-system";
+} from 'styled-system';
 
-export type TextVariant = "title";
+export type TextVariant = "title" | "subtitle" | "welcomeText";
 
 type StyledTextProps = {
   variant: TextVariant;
@@ -28,9 +28,21 @@ export const StyledText = styled.text<StyledTextProps>`
       case "title":
         return css`
           font-size: 18px;
-          line-height: 38px;
-          font-weight: bold;
+          font-weight: 500;
           padding-bottom: 15px;
+        `;
+      case "subtitle":
+        return css`
+          font-weight: 500;
+          color: #a15dc4;
+          text-align: center;
+        `;
+      case "welcomeText":
+        return css`
+          font-weight: 400;
+          text-align: center;
+          line-height: 1.5;
+          color: #424242;
         `;
     }
   }}
