@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { ChatMessage } from '../../types';
-import { StyledDiv } from '../common';
+import { ChatMessage } from "../../../types";
+import { StyledDiv } from "../../common";
 
 type InputFieldProps = {
   history: ChatMessage[];

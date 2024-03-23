@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { getCurrentTabId, scroll } from "../../services";
-import { ChatMessage } from "../../types";
-import { StyledDiv } from "../common";
+import { getCurrentTabId, scroll } from "../../../services";
+import { ChatMessage } from "../../../types";
+import { StyledDiv } from "../../common";
 import { InputField } from "./InputField";
 import { MessageHistory } from "./MessageHistory";
 
@@ -37,8 +37,8 @@ export const Content = () => {
 
   return (
     <StyledDiv
-      width="300px"
-      height="400px"
+      height="100%"
+      width="100%"
       display="flex"
       flexDirection="column"
       px="4px"

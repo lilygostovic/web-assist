@@ -1,4 +1,4 @@
-import { StyledDiv, StyledText } from "./common";
+import { StyledDiv, StyledText } from "../common";
 import { Content } from "./Content";
 
 export const Header = () => (
@@ -7,9 +7,9 @@ export const Header = () => (
   </StyledDiv>
 );
 
-export const HomePage = () => (
-  <>
+export const ChatPage = () => (
+  <StyledDiv height="100%" width="100%">
     <Header />
     <Content />
-  </>
+  </StyledDiv>
 );
