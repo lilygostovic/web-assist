@@ -1,5 +1,4 @@
-import { StyledDiv } from "./common/StyledDiv";
-import { StyledText } from "./common/StyledText";
+import { StyledDiv, StyledText } from "./common";
 import { Content } from "./Content";
 
 export const Header = () => (

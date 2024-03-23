@@ -1,8 +1,11 @@
-import { useEffect, useRef } from "react";
+import {
+  useEffect,
+  useRef,
+} from 'react';
 
-import { ChatMessage } from "../../types";
-import { StyledDiv } from "../common/StyledDiv";
-import { ChatBubble } from "./ChatBubble";
+import { ChatMessage } from '../../types';
+import { StyledDiv } from '../common';
+import { ChatBubble } from './ChatBubble';
 
 type MessageHistoryProps = {
   history: ChatMessage[];
