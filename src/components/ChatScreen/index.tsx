@@ -12,6 +12,7 @@ type ChatScreenProps = {
 
 export const ChatScreen = ({ modelName, modelSetter }: ChatScreenProps) => {
   const [history, setHistory] = useState<ChatMessage[]>([]);
+  const [modelIsTyping, setModelIsTyping] = useState(false);
   const [tabId, setTabId] = useState<number | undefined>(undefined);
 
   getCurrentTabId()
@@ -43,14 +44,18 @@ export const ChatScreen = ({ modelName, modelSetter }: ChatScreenProps) => {
     <StyledDiv height="100%" width="100%">
       <Header modelName={modelName} modelSetter={modelSetter} />
       <StyledDiv
-        height="100%"
+        height="90%"
         width="100%"
         display="flex"
         flexDirection="column"
-        pb="12px"
       >
-        <MessageHistory history={history} />
-        <InputField history={history} setHistory={setHistory} />
+        <MessageHistory history={history} modelIsTyping={modelIsTyping} />
+        <InputField
+          history={history}
+          modelIsTyping={modelIsTyping}
+          setModelIsTyping={setModelIsTyping}
+          setHistory={setHistory}
+        />
       </StyledDiv>
     </StyledDiv>
   );

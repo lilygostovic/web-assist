@@ -1,25 +1,25 @@
 import { StyledDiv, StyledText } from "../../common";
 
 type ChatBubbleProps = {
-  isUser?: boolean;
+  isModel?: boolean;
   content: string;
 };
 
-export const ChatBubble = ({ isUser = false, content }: ChatBubbleProps) => (
+export const ChatBubble = ({ isModel = false, content }: ChatBubbleProps) => (
   <StyledDiv
     display="flex"
-    justifyContent={isUser ? "left" : "right"}
-    pr={isUser ? "20%" : "0px"}
-    pl={isUser ? "0px" : "20%"}
+    justifyContent={isModel ? "left" : "right"}
+    pr={isModel ? "20%" : "0px"}
+    pl={isModel ? "0px" : "20%"}
   >
     <StyledDiv
-      bg={isUser ? "#E9E9EB" : "#8b25be"}
+      bg={isModel ? "#E9E9EB" : "#8b25be"}
       display="inline-block"
       borderRadius={16}
       my="2px"
       p="8px"
     >
-      <StyledText variant="chatBubble" color={isUser ? "black" : "white"}>
+      <StyledText variant="chatBubble" color={isModel ? "black" : "white"}>
         {content}
       </StyledText>
     </StyledDiv>

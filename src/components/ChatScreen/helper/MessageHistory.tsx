@@ -2,13 +2,17 @@ import { useEffect, useRef } from "react";
 
 import { ChatMessage } from "../../../types";
 import { StyledDiv } from "../../common";
-import { ChatBubble } from ".";
+import { ChatBubble } from "./";
 
 type MessageHistoryProps = {
   history: ChatMessage[];
+  modelIsTyping: boolean;
 };
 
-export const MessageHistory = ({ history }: MessageHistoryProps) => {
+export const MessageHistory = ({
+  history,
+  modelIsTyping,
+}: MessageHistoryProps) => {
   const messageHistoryRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -34,9 +38,12 @@ export const MessageHistory = ({ history }: MessageHistoryProps) => {
         <ChatBubble
           key={index}
           content={chatMessage.content}
-          isUser={chatMessage.speaker === "model"}
+          isModel={chatMessage.speaker === "model"}
         />
       ))}
+
+      {/* TODO:: Make this actual loading state UI */}
+      {modelIsTyping && <ChatBubble content="..." isModel />}
     </StyledDiv>
   );
 };
