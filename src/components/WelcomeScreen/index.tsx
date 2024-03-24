@@ -1,12 +1,12 @@
+import { ModelName, modelNames } from "../../types";
 import { StyledDiv, StyledText } from "../common";
 
-const modelNames = ["GPT-3.5", "GPT-4"];
-
 type ModelButtonProps = {
-  modelName: string;
+  modelName: ModelName;
+  modelSetter: React.Dispatch<React.SetStateAction<ModelName | undefined>>;
 };
 
-const ModelButton = ({ modelName }: ModelButtonProps) => (
+const ModelButton = ({ modelName, modelSetter }: ModelButtonProps) => (
   <StyledDiv
     display="flex"
     flexDirection="column"
@@ -16,12 +16,19 @@ const ModelButton = ({ modelName }: ModelButtonProps) => (
     borderRadius={8}
     my="6px"
     py="10px"
+    onClick={() => {
+      modelSetter(modelName);
+    }}
   >
     <StyledText color="white">{modelName}</StyledText>
   </StyledDiv>
 );
 
-export const WelcomeScreen = () => {
+type WelcomeScreenProps = {
+  modelSetter: React.Dispatch<React.SetStateAction<ModelName | undefined>>;
+};
+
+export const WelcomeScreen = ({ modelSetter }: WelcomeScreenProps) => {
   return (
     <StyledDiv
       display="flex"
@@ -43,7 +50,7 @@ export const WelcomeScreen = () => {
         my="45px"
       >
         {modelNames.map((modelName) => (
-          <ModelButton modelName={modelName} />
+          <ModelButton modelName={modelName} modelSetter={modelSetter} />
         ))}
       </StyledDiv>
       <StyledText variant="welcomeText">
