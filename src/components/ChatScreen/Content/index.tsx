@@ -1,13 +1,10 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  getCurrentTabId,
-  scroll,
-} from '../../../services';
-import { ChatMessage } from '../../../types';
-import { StyledDiv } from '../../common';
-import { InputField } from './InputField';
-import { MessageHistory } from './MessageHistory';
+import { getCurrentTabId, scroll } from "../../../services";
+import { ChatMessage } from "../../../types";
+import { StyledDiv } from "../../common";
+import { InputField } from "./InputField";
+import { MessageHistory } from "./MessageHistory";
 
 export const Content = () => {
   const [history, setHistory] = useState<ChatMessage[]>([]);
@@ -44,12 +41,10 @@ export const Content = () => {
       width="100%"
       display="flex"
       flexDirection="column"
+      pb="12px"
     >
       <MessageHistory history={history} />
       <InputField history={history} setHistory={setHistory} />
-
-      {/* example of how to use injectScript */}
-      <button onClick={injectScript}>Scroll</button>
     </StyledDiv>
   );
 };

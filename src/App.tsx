@@ -13,7 +13,7 @@ function App() {
       {chosenModel === undefined ? (
         <WelcomeScreen modelSetter={setChosenModel} />
       ) : (
-        <ChatScreen model={chosenModel} />
+        <ChatScreen modelName={chosenModel} modelSetter={setChosenModel} />
       )}
     </StyledDiv>
   );

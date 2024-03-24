@@ -38,7 +38,9 @@ export const WelcomeScreen = ({ modelSetter }: WelcomeScreenProps) => {
       justifyContent="center"
       alignItems="center"
     >
-      <StyledText variant="title">Welcome to WebAssist</StyledText>
+      <StyledDiv pb="15px">
+        <StyledText variant="title">Welcome to WebAssist</StyledText>
+      </StyledDiv>
       <StyledText variant="subtitle">
         To continue, please select a model to use.
       </StyledText>
