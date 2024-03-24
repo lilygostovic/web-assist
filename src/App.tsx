@@ -5,7 +5,7 @@ import { ModelName } from "./types";
 
 function App() {
   const [chosenModel, setChosenModel] = useState<undefined | ModelName>(
-    undefined
+    "GPT-4"
   );
 
   return (
