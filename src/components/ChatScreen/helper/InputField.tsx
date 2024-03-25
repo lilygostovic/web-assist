@@ -1,9 +1,10 @@
 import { useState } from "react";
 
-import { ChatMessage } from "../../../types";
+import { ChatMessage, ModelName } from "../../../types";
 import { StyledDiv } from "../../common";
 
 type InputFieldProps = {
+  modelName: ModelName;
   history: ChatMessage[];
   modelIsTyping: boolean;
   setHistory: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
@@ -11,6 +12,7 @@ type InputFieldProps = {
 };
 
 export const InputField = ({
+  modelName,
   history,
   modelIsTyping,
   setHistory,
@@ -24,7 +26,7 @@ export const InputField = ({
     return false;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setModelIsTyping(true);
 
@@ -33,8 +35,16 @@ export const InputField = ({
       speaker: "user",
     };
 
+    // const res = await callModel(history, newMessage)
+
+    // Get browser info for call to model
+    // const browserInfo = await getBrowserInfo();
+
+    // API_CALL(browserInfo, modelName, history)
+
     setHistory([...history, newMessage]);
     setText("");
+    setModelIsTyping(false);
   };
 
   return (

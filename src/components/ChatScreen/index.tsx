@@ -51,6 +51,7 @@ export const ChatScreen = ({ modelName, modelSetter }: ChatScreenProps) => {
       >
         <MessageHistory history={history} modelIsTyping={modelIsTyping} />
         <InputField
+          modelName={modelName}
           history={history}
           modelIsTyping={modelIsTyping}
           setModelIsTyping={setModelIsTyping}

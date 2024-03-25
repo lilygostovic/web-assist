@@ -1,7 +1,3 @@
-interface ChromeTab {
-  id: number | undefined;
-}
-
 export const getCurrentTabId = (): Promise<number> => {
   return new Promise<number>((resolve, reject) => {
     chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
