@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { callModel } from "../../../services/modelsService";
 import { ChatMessage, ModelName } from "../../../types";
 import { StyledDiv } from "../../common";
 
@@ -28,22 +29,19 @@ export const InputField = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setModelIsTyping(true);
 
-    const newMessage: ChatMessage = {
-      content: text,
-      speaker: "user",
-    };
-
-    // const res = await callModel(history, newMessage)
-
-    // Get browser info for call to model
-    // const browserInfo = await getBrowserInfo();
-
-    // API_CALL(browserInfo, modelName, history)
-
-    setHistory([...history, newMessage]);
+    setHistory([...history, { content: text, speaker: "user" }]);
     setText("");
+
+    setModelIsTyping(true);
+    await callModel(modelName, text, history).then(async (newHistory) => {
+      for (let msg of newHistory) {
+        // Wait for 0.5 seconds to seem more natural
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        setHistory((prevHistory) => [...prevHistory, msg]);
+      }
+    });
     setModelIsTyping(false);
   };
 

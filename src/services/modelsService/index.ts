@@ -1,0 +1,1 @@
+export { callModel } from './callModel';
