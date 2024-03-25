@@ -1,11 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import {
-  ChatScreen,
-  StyledDiv,
-  WelcomeScreen,
-} from './components';
-import { ModelName } from './types';
+import { ChatScreen, StyledDiv, WelcomeScreen } from "./components";
+import { ModelName } from "./types";
 
 function App() {
   // TODO:: set default to undefined, just like this for ease of testing
