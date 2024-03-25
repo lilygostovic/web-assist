@@ -36,8 +36,8 @@ export const InputField = ({
     setModelIsTyping(true);
     await callModel(modelName, text, history).then(async (newHistory) => {
       for (let msg of newHistory) {
-        // Wait for 0.5 seconds to seem more natural
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Wait for 1 second to seem more natural
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         setHistory((prevHistory) => [...prevHistory, msg]);
       }

@@ -42,8 +42,7 @@ export const MessageHistory = ({
         />
       ))}
 
-      {/* TODO:: Make this actual loading state UI */}
-      {modelIsTyping && <ChatBubble content="..." isModel />}
+      {modelIsTyping && <ChatBubble isLoading />}
     </StyledDiv>
   );
 };
