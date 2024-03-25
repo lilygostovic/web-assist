@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { getCurrentTabId, scroll } from "../../services";
+import { getCurrentTabId } from "../../services";
 import { ChatMessage, ModelName } from "../../types";
 import { StyledDiv } from "../common";
 import { Header, InputField, MessageHistory } from "./helper";
@@ -22,23 +22,6 @@ export const ChatScreen = ({ modelName, modelSetter }: ChatScreenProps) => {
     .catch(() => {
       alert("Error finding tabId.");
     });
-
-  const injectScript = () => {
-    if (tabId === undefined) {
-      alert("The tabId is undefined, please try again in a moment.");
-      return;
-    }
-
-    // Execute the provided js/ts code in the current active tab
-    chrome.scripting
-      .executeScript({
-        target: { tabId: tabId },
-        func: () => scroll(500),
-      })
-      .catch((err: any) => {
-        alert(err);
-      });
-  };
 
   return (
     <StyledDiv height="100%" width="100%">

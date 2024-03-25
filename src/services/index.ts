@@ -1,1 +1,1 @@
-export { getBrowserInfo, getCurrentTabId } from "./ChromeExtensionsAPI";
+export { getBrowserInfo, getCurrentTabId } from "./chromeExtensionsService";
