@@ -1,5 +1,5 @@
-import { StyledDiv, StyledText } from "../../common";
-import { LoadingView } from "./LoadingView";
+import { StyledDiv, StyledText } from "../../../components";
+import { LoadingView } from "../LoadingView";
 
 type ChatBubbleProps = {
   content?: string;

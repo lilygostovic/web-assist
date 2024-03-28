@@ -1,9 +1,11 @@
 import { useState } from "react";
 
-import { getCurrentTabId } from "../../services";
+import { StyledDiv } from "../../components";
+import { useChromeExtensionService } from "../../services";
 import { ChatMessage, ModelName } from "../../types";
-import { StyledDiv } from "../common";
-import { Header, InputField, MessageHistory } from "./helper";
+import { Header } from "./Header";
+import { InputField } from "./InputField";
+import { MessageHistory } from "./MessageHistory";
 
 type ChatScreenProps = {
   modelName: ModelName;
@@ -14,6 +16,8 @@ export const ChatScreen = ({ modelName, modelSetter }: ChatScreenProps) => {
   const [history, setHistory] = useState<ChatMessage[]>([]);
   const [modelIsTyping, setModelIsTyping] = useState(false);
   const [tabId, setTabId] = useState<number | undefined>(undefined);
+
+  const { getCurrentTabId } = useChromeExtensionService();
 
   getCurrentTabId()
     .then((tabId) => {

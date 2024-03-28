@@ -1,1 +1,1 @@
-export { callModel } from './callModel';
+export { postChat } from "./postChat";

@@ -1,5 +1,5 @@
-import { ModelName } from "../../../types";
-import { StyledDiv, StyledText } from "../../common";
+import { ModelName } from "../../types";
+import { StyledDiv, StyledText } from "../../components";
 
 type HeaderProps = {
   modelName: ModelName;

@@ -3,7 +3,7 @@ import React from "react";
 
 import BeatLoader from "react-spinners/BeatLoader";
 
-import { StyledDiv } from "../../common/StyledDiv";
+import { StyledDiv } from "../../components/StyledDiv";
 
 export const LoadingView = () => {
   return (

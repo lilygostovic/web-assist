@@ -1,5 +1,5 @@
 import { ModelName, modelNames } from "../../types";
-import { StyledDiv, StyledText } from "../common";
+import { StyledDiv, StyledText } from "../../components";
 
 type ModelButtonProps = {
   modelName: ModelName;

@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { ChatScreen, StyledDiv, WelcomeScreen } from "./components";
+import { StyledDiv } from "./components";
+import { ChatScreen, WelcomeScreen } from "./screens";
 import { ModelName } from "./types";
 
 function App() {

@@ -1,8 +1,9 @@
 import { useState } from "react";
 
-import { callModel } from "../../../services/modelsService";
-import { ChatMessage, ModelName } from "../../../types";
-import { StyledDiv } from "../../common";
+import { StyledDiv } from "../../../components";
+import { useModelsService } from "../../../services";
+import { ChatMessage, ModelName, PrevTurn } from "../../../types";
+import { handleResponse } from "./handleResponse";
 
 type InputFieldProps = {
   modelName: ModelName;
@@ -20,28 +21,37 @@ export const InputField = ({
   setModelIsTyping,
 }: InputFieldProps) => {
   const [text, setText] = useState("");
+  const [sessionCount, setSessionCount] = useState(1);
+  const [prevTurn, setPrevTurn] = useState<null | PrevTurn>(null);
+
+  const { postChat } = useModelsService();
 
   const blockSubmit = () => {
-    // TODO:: improve this error handling
+    // TODO:: improve this error handling, currently it erases the whole chathistory if this runs
     alert("Model is loading...");
-    return false;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // Prevent submission with empty textbox
     e.preventDefault();
 
+    // Update chat to include user's message
     setHistory([...history, { content: text, speaker: "user" }]);
     setText("");
 
+    // Enable loading state
     setModelIsTyping(true);
-    await callModel(modelName, text, history).then(async (newHistory) => {
-      for (let msg of newHistory) {
-        // Wait for 1 second to seem more natural
-        await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        setHistory((prevHistory) => [...prevHistory, msg]);
-      }
-    });
+    // Await response from backend
+    const res = await postChat(modelName, text, prevTurn, sessionCount);
+
+    // Update previous turn and session count variables
+    setPrevTurn(res);
+    setSessionCount(sessionCount + 1);
+
+    handleResponse({ res, setHistory });
+
+    // Disable loading state
     setModelIsTyping(false);
   };
 
