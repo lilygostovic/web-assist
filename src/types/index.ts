@@ -26,8 +26,32 @@ type ScrollPrevTurn = {
   scrollX: number | undefined;
   scrollY: number | undefined;
 };
-type ActionPrevTurn = {
+type LoadPrevTurn = {
   type: "browser";
-  intent: "click" | "textinput" | "submit" | "change" | "load";
+  intent: "load";
 };
-export type PrevTurn = ChatPrevTurn | ScrollPrevTurn | ActionPrevTurn;
+type PrevTurnWithElement = {
+  type: "browser";
+  intent: "click" | "textinput" | "submit" | "change";
+  element: {
+    attributes: object;
+    bbox: {
+      bottom: number;
+      height: number;
+      left: number;
+      right: number;
+      top: number;
+      width: number;
+      x: number;
+      y: number;
+    };
+    tagName: string;
+    xpath: string;
+    textContent: string;
+  };
+};
+export type PrevTurn =
+  | ChatPrevTurn
+  | ScrollPrevTurn
+  | LoadPrevTurn
+  | PrevTurnWithElement;

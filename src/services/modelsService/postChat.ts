@@ -14,8 +14,6 @@ export const postChat = async (
   };
   const uidKey = "web-assist-id";
 
-  const element = {}; //TODO:: how should this be set
-
   // Gather metadata
   const { tabId, url, zoomLevel } = await getTabInfo(); //TODO:: not sure if zoomLevel is being set correctly
   const { viewportSize, rawHTML } = await getBrowserInfo(tabId);
