@@ -1,17 +1,22 @@
 import { ModelName, PrevTurn } from "../../types";
 import { getBrowserInfo } from "../chromeExtensionsService";
-import { getMouseCoordinates, getTabInfo, processHTML } from "./helper";
+import {
+  generateSessionID,
+  getMouseCoordinates,
+  getTabInfo,
+  processHTML,
+} from "./helper";
 
 export const postChat = async (
   model: ModelName,
   newMessage: string,
-  prevTurn: PrevTurn | null,
-  sessionID: number
+  prevTurn: PrevTurn | null
 ): Promise<PrevTurn> => {
   const userIntent = {
     type: "chat",
     utterance: newMessage,
   };
+  const sessionID = generateSessionID();
   const uidKey = "web-assist-id";
 
   // Gather metadata
@@ -29,22 +34,27 @@ export const postChat = async (
     zoomLevel,
   };
 
-  const properties = {
-    tabId, // TODO:: do we need this to be sent again?
-    url, // TODO:: do we need this to be sent again?
-    // TODO:: add transitionQualifiers and transitionType if prevTurn.intent is load
-  };
-
-  //
-
-  // =========================================================================================
-
-  //
+  // TODO:: Remove if not using or make work
+  // Initialize properties with base properties
+  // let properties: Properties = {
+  //   transitionQualifiers: undefined,
+  //   transitionType: undefined,
+  // };
+  // if (prevTurn?.intent === "load") {
+  //   const { transitionQualifiers, transitionType } = await getNavigationInfo(
+  //     tabId
+  //   );
+  //   properties = {
+  //     ...properties,
+  //     transitionQualifiers,
+  //     transitionType,
+  //   };
+  // }
 
   // Call backend model
 
   return {
-    type: "chat",
+    // TODO:: remove dummy response
     intent: "say",
     utterance: "Thank you for using my services.",
   };

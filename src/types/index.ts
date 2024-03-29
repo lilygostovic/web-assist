@@ -15,43 +15,81 @@ export type BrowserInfo = {
 };
 
 // Previous Turn
+type MetaData = {
+  mouseX: number;
+  mouseY: number;
+  tabId: number;
+  url: string;
+  viewportHeight: number;
+  viewportWidth: number;
+  zoomLevel: number;
+};
+type Element = {
+  attributes: object;
+  bbox: {
+    bottom: number;
+    height: number;
+    left: number;
+    right: number;
+    top: number;
+    width: number;
+    x: number;
+    y: number;
+  };
+  tagName: string;
+  xpath: string;
+  textContent: string;
+};
+export type Properties = {
+  transitionQualifiers: undefined | TransitionQualifier[];
+  transitionType: undefined | TransitionType;
+};
 type ChatPrevTurn = {
-  type: "chat";
   intent: "say";
   utterance: string;
+  html?: string;
+  metadata?: MetaData;
 };
 type ScrollPrevTurn = {
-  type: "browser";
   intent: "scroll";
+  html: string;
+  metadata: MetaData;
   scrollX: number | undefined;
   scrollY: number | undefined;
 };
 type LoadPrevTurn = {
-  type: "browser";
   intent: "load";
+  html: string;
+  metadata: MetaData;
+  properties?: Properties;
 };
 type PrevTurnWithElement = {
-  type: "browser";
-  intent: "click" | "textinput" | "submit" | "change";
-  element: {
-    attributes: object;
-    bbox: {
-      bottom: number;
-      height: number;
-      left: number;
-      right: number;
-      top: number;
-      width: number;
-      x: number;
-      y: number;
-    };
-    tagName: string;
-    xpath: string;
-    textContent: string;
-  };
+  intent: "change" | "click" | "submit" | "textinput";
+  html: string;
+  metadata: MetaData;
+  element: Element;
 };
 export type PrevTurn =
   | ChatPrevTurn
   | ScrollPrevTurn
   | LoadPrevTurn
   | PrevTurnWithElement;
+
+export type TransitionQualifier =
+  | "client_redirect"
+  | "server_redirect"
+  | "forward_back"
+  | "from_address_bar";
+
+export type TransitionType =
+  | "link"
+  | "typed"
+  | "auto_bookmark"
+  | "auto_subframe"
+  | "manual_subframe"
+  | "generated"
+  | "start_page"
+  | "form_submit"
+  | "reload"
+  | "keyword"
+  | "keyword_generated";

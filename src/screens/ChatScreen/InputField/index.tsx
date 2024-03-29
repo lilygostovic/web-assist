@@ -21,7 +21,6 @@ export const InputField = ({
   setModelIsTyping,
 }: InputFieldProps) => {
   const [text, setText] = useState("");
-  const [sessionCount, setSessionCount] = useState(1);
   const [prevTurn, setPrevTurn] = useState<null | PrevTurn>(null);
 
   const { postChat } = useModelsService();
@@ -43,11 +42,10 @@ export const InputField = ({
     setModelIsTyping(true);
 
     // Await response from backend
-    const res = await postChat(modelName, text, prevTurn, sessionCount);
+    const res = await postChat(modelName, text, prevTurn);
 
-    // Update previous turn and session count variables
+    // Update previous turn
     setPrevTurn(res);
-    setSessionCount(sessionCount + 1);
 
     handleResponse({ res, setHistory });
 
