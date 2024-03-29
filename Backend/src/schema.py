@@ -67,6 +67,7 @@ class PrevTurn(BaseModel):
     intent: BrowserIntentEnum
 
     html: Optional[str] = None
+    bboxes: Optional[Dict[str, BoundingBox]] = None
     metadata: Optional[Metadata] = None
     element: Optional[Element] = None
 
@@ -127,6 +128,8 @@ class RequestBody(BaseModel):
         if intent in browser_intents:
             if not self.prev_turn.html:
                 raise_field_error("html", "prev_turn", intent)
+            if not self.prev_turn.bboxes:
+                raise_field_error("bboxes", "prev_turn", intent)
 
             if not self.prev_turn.metadata:
                 raise_field_error("metadata", "prev_turn", intent)
