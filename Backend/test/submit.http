@@ -1,0 +1,43 @@
+POST http://127.0.0.1:8000/v1/get_next_action
+Content-Type: application/json
+
+{
+  "user_intent": {
+    "intent": "chat",
+    "utterance": "Hello"
+  },
+  "sessionID": "123456789",
+  "uid_key": "web-assist-id",
+  "prev_turn": {
+    "intent": "submit",
+    "html": "<html><body>Your HTML content</body></html>",
+    "metadata": {
+      "mouseX": 0,
+      "mouseY": 0,
+      "tabId": 2011645173,
+      "url": "https://www.google.com/search?q=wealthsimple+tax calculator",
+      "viewportHeight": 651,
+      "viewportWidth": 1366,
+      "zoomLevel": 1
+    },
+    "element": {
+      "attributes": {
+        "class": "mr-xs",
+        "web-assist-id": "44c539a8-1434-4fa6"
+      },
+      "bbox": {
+        "bottom": 522.1875,
+        "height": 23,
+        "left": 122.5,
+        "right": 244.75,
+        "top": 499.1875,
+        "width": 122.25,
+        "x": 122.5,
+        "y": 499.1875
+      },
+      "tagName": "SPAN",
+      "xpath": "id(\"main\")/div[1]/div[3]/form[1]/div[1]/div[1]/div[1]/div[5]/div[1]/label[1]/span[1]",
+      "textContent": "xxx"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+POST http://127.0.0.1:8000/v1/get_next_action
+Content-Type: application/json
+
+{
+  "user_intent": {
+    "intent": "chat",
+    "utterance": "Hello"
+  },
+  "sessionID": "123456789",
+  "uid_key": "web-assist-id",
+  "prev_turn": {
+    "intent": "scroll",
+    "html": "<html><body>Your HTML content</body></html>",
+    "metadata": {
+      "mouseX": 0,
+      "mouseY": 0,
+      "tabId": 2011645173,
+      "url": "https://www.google.com/search?q=wealthsimple+tax calculator",
+      "viewportHeight": 651,
+      "viewportWidth": 1366,
+      "zoomLevel": 1
+    },
+    "scrollX": 1,
+    "scrollY": 2
+    }
+  }
