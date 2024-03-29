@@ -1,6 +1,2 @@
-# dependencies
-/node_modules
 .DS_Store
-
-# production
-/dist
+node_modules

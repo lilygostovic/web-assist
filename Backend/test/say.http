@@ -1,0 +1,15 @@
+POST http://127.0.0.1:8000/v1/get_next_action
+Content-Type: application/json
+
+{
+  "user_intent": {
+    "intent": "chat",
+    "utterance": "Hello"
+  },
+  "sessionID": "123456789",
+  "uid_key": "web-assist-id",
+  "prev_turn": {
+    "intent": "say",
+    "utterance": "Hello!"
+  }
+}

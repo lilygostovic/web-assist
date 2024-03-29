@@ -1,23 +1,21 @@
-An innovative browser extension designed to enable users to converse with Large Language Models (LLMs) towards accomplishing real-world tasks within web browsers.
+# WEB Assist
 
-# Running locally
+Using WebLinx models for chat-based web task assistant.
 
-Clone this repo to your local machine `git clone https://github.com/lilygostovic/web-assist.git`
+## Documentation
 
-Run `npm install` to install all dependencies.
+To use or develop the extension locally, please refer to its [documentation](./Extension/README.md).
+To use or develop the backend locally, please refer to its documentation.
 
-Run `npm run build` to create the **dist** folder.
+## Overall System
 
-Open Chrome and open *chrome://extensions/*.
+Our main purpose is to have a very intuitive frontend, and remove as much friction for the user. Hence, we chose to develop a Google Extension.
 
-Enable Developer mode in the top right corner, then click the **Load unpacked** button.
+On a high level, a typical workflow would look like the following:
+![System Diagram](./imgs/WebAssist%20-%20System%20Diagram.png)
 
-Upload **dist** folder, now you can run the extension locally. 
+For communication purposes, the extension and backend currently communicates through dedicated REST API calls. Details can be found [here](./Backend/API_info.md).
 
-## Helpful Tips
+The backend server would be responsible of keeping track of the turns, and communicate with the two models. The following diagram is provide for clarity:
 
-Pin the extension in your browser for ease of access.
-
-Create a keyboard shortcut to open the extension:
-* Click **Keyboard shortcuts**
-* Under WebAssist, under **Activate the extension**, click on the edit button and key in the shortcut you would like to activate the extension (ex. ⌘A)
+![Backend Diagram](./imgs/WebAssist%20-%20Backend.png)

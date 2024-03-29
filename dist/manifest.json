@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "name": "WebAssist",
+  "description": "Browser extension which provides users with a way to converse with Large Language Models towards accomplishing real-world tasks within web browsers.",
+  "action": {
+    "default_popup": "js/index.html",
+    "default_title": "WebAssist"
+  },
+  "permissions": ["scripting", "activeTab", "webNavigation"]
+}
