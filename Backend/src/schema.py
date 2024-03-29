@@ -2,15 +2,25 @@ from enum import Enum
 from typing import Any, Optional, Dict, Union, List
 from pydantic import BaseModel, validator, model_validator
 
+
+class GettableBaseModel(BaseModel):
+
+    def __getitem__(self, item):
+        return getattr(self, item)
+
+    def get(self, item):
+        return getattr(self, item)
+
+
 ### User Intent ###########
 
 
 class UserIntentEnum(str, Enum):
-    chat = "chat"
+    say = "say"
     continue_ = "continue"
 
 
-class UserIntent(BaseModel):
+class UserIntent(GettableBaseModel):
     intent: UserIntentEnum
     utterance: Optional[str] = None
 
@@ -18,7 +28,7 @@ class UserIntent(BaseModel):
 #######################################################
 
 
-class BoundingBox(BaseModel):
+class BoundingBox(GettableBaseModel):
     bottom: float
     height: float
     left: float
@@ -29,7 +39,7 @@ class BoundingBox(BaseModel):
     y: float
 
 
-class Element(BaseModel):
+class Element(GettableBaseModel):
     attributes: Dict[str, Any]
     bbox: BoundingBox
     tagName: str
@@ -37,7 +47,7 @@ class Element(BaseModel):
     textContent: str
 
 
-class Metadata(BaseModel):
+class Metadata(GettableBaseModel):
     mouseX: int
     mouseY: int
     tabId: float  # use float in case the integer is too large
@@ -47,7 +57,7 @@ class Metadata(BaseModel):
     zoomLevel: int
 
 
-class TransitionProperties(BaseModel):
+class TransitionProperties(GettableBaseModel):
     transitionType: Optional[str] = None
     transitionQualifiers: Optional[List[str]] = None
 
@@ -63,7 +73,7 @@ class BrowserIntentEnum(str, Enum):
     textInput = "textinput"
 
 
-class PrevTurn(BaseModel):
+class PrevTurn(GettableBaseModel):
     intent: BrowserIntentEnum
 
     html: Optional[str] = None
@@ -85,17 +95,17 @@ def raise_field_error(field_name, param_name, intent):
     )
 
 
-class RequestBody(BaseModel):
+class RequestBody(GettableBaseModel):
     user_intent: UserIntent
     sessionID: str
     uid_key: str
     prev_turn: Optional[PrevTurn] = None
 
     @model_validator(mode="after")
-    def validate_utterance_in_user_chat_intent(self):
+    def validate_utterance_in_user_say_intent(self):
         intent = self.user_intent.intent
 
-        if (intent == UserIntentEnum.chat) and (not self.user_intent.utterance):
+        if (intent == UserIntentEnum.say) and (not self.user_intent.utterance):
             raise_field_error("utterance", "user_intent", intent)
 
         return self
@@ -157,12 +167,12 @@ class RequestBody(BaseModel):
 ##########################################################
 
 
-class ResponseBody(BaseModel):
+class ResponseBody(GettableBaseModel):
     intent: BrowserIntentEnum
     args: Dict[str, Any]
     element: str
 
 
-class ErrorResponse(BaseModel):
+class ErrorResponse(GettableBaseModel):
     error: str
     message: str
