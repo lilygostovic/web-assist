@@ -29,7 +29,7 @@ def main(cfg):
 
     # dmr_model = DMR.HF_DMR(
     #     api_url="https://api-inference.huggingface.co/models/McGill-NLP/MiniLM-L6-dmr",
-    #     auth_token="Bearer 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",
+    #     auth_token="",
     #     sim_method=cfg.dmr.get("similarity", "cos_sim"),
     # )
 
