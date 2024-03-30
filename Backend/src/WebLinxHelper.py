@@ -1,52 +1,11 @@
+import logging
+import weblinx as wl
+
+from datetime import datetime
 from functools import cached_property, lru_cache
 from typing import Dict, Union
-import weblinx as wl
+
 from .schema import BrowserIntentEnum, UserIntent, UserIntentEnum, PrevTurn
-
-
-class InferReplay(wl.Replay):
-    """
-    Takes in the Pydantic model and simulates the wl.Replay object
-    * Override some properties / methods for easier access.
-    """
-
-    def __init__(self, session_id: str):
-        self.session_id = session_id
-        self.turns = []
-
-    def __getitem__(self, key):
-        if isinstance(key, slice):
-            return [self[i] for i in range(*key.indices(len(self)))]
-
-        if key < 0:
-            key = len(self) + key
-
-        elif key > len(self) - 1:
-            raise IndexError(
-                f"Turn index {key} out of range. The replay has {len(self)} turns, so the last index is {len(self) - 1}."
-            )
-
-        return self.turns[key]
-
-    def __len__(self):
-        return len(self.turns)
-
-    def __repr__(self):
-        return f"InferReplay | Session `{self.session_id}` | Total Turns: [{len(self)}]"
-
-    def __iter__(self):
-        return iter(self.turns)
-
-    @classmethod
-    def from_demonstration(cls, demonstration: wl.Demonstration):
-        raise NotImplementedError
-
-    def appendTurn(self, turn: wl.Turn):
-        """
-        Appends the turn to the replay object.
-        Does not make sure the index is correct.
-        """
-        self.turns.append(turn)
 
 
 class InferTurn(wl.Turn):
@@ -56,11 +15,19 @@ class InferTurn(wl.Turn):
     """
 
     def __init__(
-        self, prev_turn: Union[PrevTurn, UserIntent], index: int, timestamp=float
+        self,
+        prev_turn: Union[PrevTurn, UserIntent],
+        index: int,
+        timestamp: float,
+        demo_name: str,
     ):
         self.prev_turn = prev_turn
         self.index = index
         self.timestamp_ = timestamp
+        self.demo_name = demo_name
+        self.base_dir = "fake dir"
+
+        self.utterance = self.prev_turn.utterance
 
     @classmethod
     def from_replay(cls, replay: "Replay", index: int):
@@ -71,6 +38,17 @@ class InferTurn(wl.Turn):
 
     def get(self, item):
         return getattr(self, item)
+
+    def __str__(self):
+        return f"Turn {self.index}: [{self.speaker}] - {self.intent}"
+
+    def __repr__(self):
+        return f"Turn {self.index}: [{self.speaker}] - {self.intent}"
+
+    # to have access to .items()
+    # doesn't work for @property
+    def items(self):
+        return vars(self).items()
 
     # Done for compatibility purposes
     @cached_property
@@ -118,41 +96,52 @@ class InferTurn(wl.Turn):
 
     @property
     def metadata(self) -> dict:
-        return self.prev_turn.get("metadata")
+        if isinstance(self.prev_turn, UserIntent):
+            return None
+        else:
+            return self.prev_turn.metadata
 
     @property
     def client_x(self) -> int:
-        raise NotImplementedError
+        return None
 
     @property
     def client_y(self) -> int:
-        raise NotImplementedError
+        return None
 
     @property
     def element(self) -> dict:
-        return self.prev_turn.get("element")
+        if isinstance(self.prev_turn, UserIntent):
+            return None
+        else:
+            return self.prev_turn.element
 
     @property
     def props(self) -> dict:
-        return self.prev_turn.get("properties")
+        if isinstance(self.prev_turn, UserIntent):
+            return None
+        else:
+            return self.prev_turn.properties
 
     @property
     def bboxes(self) -> dict:
-        return self.prev_turn.get("bboxes")
+        if isinstance(self.prev_turn, UserIntent):
+            return None
+        else:
+            return self.prev_turn.bboxes
 
     @property
     def html(self) -> str:
-        return self.prev_turn.get("html")
+        if isinstance(self.prev_turn, UserIntent):
+            return None
+        else:
+            return self.prev_turn.html
 
     @property
     def speaker(self) -> str:
-        if type(self.prev_turn) == UserIntent:
+        if isinstance(self.prev_turn, UserIntent):
             return "instructor"
         return "navigator"
-
-    @property
-    def utterance(self) -> str:
-        return self.prev_turn.get("utterance")
 
     def validate(self) -> bool:
         # Prev turn is already validated
@@ -186,13 +175,86 @@ class InferTurn(wl.Turn):
     def get_screenshot_status(self):
         raise NotImplementedError
 
-    def get_xpaths_dict(
+
+class InferReplay(wl.Replay):
+    """
+    Takes in the Pydantic model and simulates the wl.Replay object
+    * Override some properties / methods for easier access.
+    """
+
+    def __init__(
         self,
-        uid_key="data-webtasks-id",
-        cache_dir=None,
-        allow_save=True,
-        check_hash=False,
-        parser="lxml",
-        json_backend="auto",
+        session_id: str,
     ):
+        self.session_id = session_id
+        self.demo_name = session_id
+        self.base_dir = "fake dir"
+        self.turns = []
+        self.start = datetime.now()
+        self.index = 0
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            return [self[i] for i in range(*key.indices(len(self)))]
+
+        if key < 0:
+            key = len(self) + key
+
+        elif key > len(self) - 1:
+            raise IndexError(
+                f"Turn index {key} out of range. The replay has {len(self)} turns, so the last index is {len(self) - 1}."
+            )
+
+        return self.turns[key]
+
+    def __len__(self):
+        return len(self.turns)
+
+    def __repr__(self):
+        return self.__str__
+
+    def __str__(self):
+        str_rep = f"Replay session `{self.session_id}` with {len(self)} turns.\n"
+        for t in self.turns:
+            str_rep += f"\t {t}\n"
+        return str_rep
+
+    def __iter__(self):
+        return iter(self.turns)
+
+    @classmethod
+    def from_demonstration(cls, demonstration: wl.Demonstration):
         raise NotImplementedError
+
+    def buildInferTurn(self, turn: Union[PrevTurn, UserIntent]) -> InferTurn:
+        """
+        Builds the turn
+        **Does not** append to replay
+        """
+        result = InferTurn(
+            prev_turn=turn,
+            index=self.index,
+            timestamp=(datetime.now() - self.start).total_seconds(),
+            demo_name=self.session_id,
+        )
+        self.index += 1
+        return result
+
+    def addInferTurn(self, turn: InferTurn):
+        """
+        Adds Infer Turn into the replay
+        """
+        # update turn.index if needed
+
+        self.turns.append(turn)
+
+        logging.info(
+            f"Added Turn `[{turn.speaker}] - {turn.intent}` into Replay at index {turn.index} "
+        )
+
+    def build_add_InferTurn(self, prev_turn: Union[PrevTurn, UserIntent]):
+        """
+        Builds the turn & add into the replay
+        """
+        turn = self.buildInferTurn(prev_turn)
+        self.addInferTurn(turn)
