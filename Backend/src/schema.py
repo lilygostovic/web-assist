@@ -5,11 +5,11 @@ from pydantic import BaseModel, validator, model_validator
 
 class GettableBaseModel(BaseModel):
 
-    def __getitem__(self, item):
-        return getattr(self, item)
+    def __getitem__(self, item, default=None):
+        return getattr(self, item, default)
 
-    def get(self, item):
-        return getattr(self, item)
+    def get(self, item, default=None):
+        return getattr(self, item, default)
 
 
 ### User Intent ###########
@@ -60,6 +60,7 @@ class Metadata(GettableBaseModel):
 class TransitionProperties(GettableBaseModel):
     transitionType: Optional[str] = None
     transitionQualifiers: Optional[List[str]] = None
+    url: Optional[str] = None  # compatibility
 
 
 ########################################

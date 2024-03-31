@@ -11,6 +11,7 @@ import torch
 import traceback
 import weblinx as wl
 import weblinx.utils.format as wf
+import weblinx.processing.intent as wi
 
 
 from functools import partial
@@ -25,7 +26,11 @@ from weblinx.processing.dom import clean_and_prune_tree
 from weblinx.processing.outputs import (
     parse_predicted_output_string,
     sanitize_args,
-    infer_element_for_action,
+    # infer_element_for_action,
+    get_element_uid_by_coords,
+    get_xy_coords_corners,
+    dict_has_keys,
+    # get_element_info,
 )
 from weblinx.processing.prompt import (
     find_turns_with_instructor_chat,
@@ -230,8 +235,6 @@ class ActionAgent(BaseActionAgent):
                 intent=intent, args=args, turn=turn, uid_key=uid_key
             )
             pred_action = {"intent": intent, "args": args, "element": infered_element}
-
-            logging.debug(pred_action)
 
         return pred_action
 
@@ -481,3 +484,77 @@ def insert_empty_user_content_at_first(prompt: list):
 
 
 ##########################################################################
+
+
+def infer_element_for_action(intent, args, turn: wl.Turn, uid_key: str):
+    """
+    Given an intent and args, infer the element that the action is performed on, if
+    the element is not explicitly specified.
+    """
+    element = None
+
+    if intent in wi.Intent.get_element_intents(as_set=True):
+
+        # find the referenced element
+        if "uid" in args:
+            uid = args["uid"]
+
+        elif uid_key in args:
+            uid = args[uid_key]
+
+        elif "x" in args and "y" in args:
+            if args["x"] is None or args["y"] is None:
+                uid = None
+            else:
+                uid = get_element_uid_by_coords(turn, args["x"], args["y"])
+
+        elif dict_has_keys(args, ["top", "left", "right", "bottom"]):
+            coords = get_xy_coords_corners(args)
+            if coords is not None:
+                x, y = coords
+                uid = get_element_uid_by_coords(turn, x, y)
+            else:
+                uid = None
+        else:
+            uid = None
+
+        if uid is not None:
+            element = get_element_info(turn, uid, uid_key)
+
+    return element
+
+
+def get_element_info(
+    turn: wl.Turn,
+    uid: str,
+    uid_key: str,
+):
+    """
+    Given a uid_key for an element, retrieve additional information about the element from the HTML which can be used for evaluation.
+
+    Extracts only the information needed loafor evaluation.
+    """
+    if not uid:
+        return None
+
+    xpaths_dict = turn.get_xpaths_dict(uid_key=uid_key)
+
+    if len(xpaths_dict) == 0:
+        return None
+
+    if uid not in xpaths_dict:
+        logging.debug(f"UID {uid} not found in xpaths dict")
+        return None
+
+    if turn.bboxes is None or uid not in turn.bboxes:
+        return None
+
+    element_info = {
+        "attributes": {
+            uid_key: uid,
+        },
+        "bbox": turn.bboxes[uid],
+        "xpath": xpaths_dict[uid],
+    }
+
+    return element_info

@@ -1,4 +1,5 @@
 import logging
+import lxml
 import weblinx as wl
 
 from datetime import datetime
@@ -123,14 +124,14 @@ class InferTurn(wl.Turn):
         else:
             return self.prev_turn.properties
 
-    @property
+    @cached_property
     def bboxes(self) -> dict:
         if isinstance(self.prev_turn, UserIntent):
             return None
         else:
             return self.prev_turn.bboxes
 
-    @property
+    @cached_property
     def html(self) -> str:
         if isinstance(self.prev_turn, UserIntent):
             return None
@@ -174,6 +175,35 @@ class InferTurn(wl.Turn):
 
     def get_screenshot_status(self):
         raise NotImplementedError
+
+    def get_xpaths_dict(
+        self,
+        uid_key="data-webtasks-id",
+        cache_dir=None,
+        allow_save=True,
+        check_hash=False,
+        parser="lxml",
+        json_backend="auto",
+    ):
+        if not self.html:
+            return {}
+
+        tree = lxml.html.fromstring(self.html)
+        root = tree.getroottree()
+
+        elems = root.xpath(f"//*[@{uid_key}]")
+
+        if len(elems) == 0:
+            return {}
+
+        xpaths = {}
+
+        for elem in elems:
+            uid = elem.attrib[uid_key]
+            xpath = root.getpath(elem)
+            xpaths[uid] = xpath
+
+        return xpaths
 
 
 class InferReplay(wl.Replay):

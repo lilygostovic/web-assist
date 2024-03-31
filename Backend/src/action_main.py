@@ -7,8 +7,15 @@ from datetime import datetime
 from omegaconf import OmegaConf
 
 from . import ActionAgent
-from .WebLinxHelper import InferReplay, InferTurn
-from .schema import PrevTurn, UserIntent, UserIntentEnum, BrowserIntentEnum
+from .WebLinxHelper import InferReplay
+from .schema import (
+    PrevTurn,
+    UserIntent,
+    UserIntentEnum,
+    BrowserIntentEnum,
+    Element,
+    BoundingBox,
+)
 
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")
@@ -61,6 +68,27 @@ def main(cfg):
         "viewportWidth": 1366,
         "zoomLevel": 1,
     }
+
+    element = Element(
+        attributes={
+            "class": "LC20lb MBeuO DKV0Md",
+            "data-webtasks-id": "61376daa-59d3-4a16",
+        },
+        bbox=BoundingBox(
+            bottom=263.53125,
+            height=31,
+            left=180,
+            right=503.171875,
+            top=232.53,
+            width=323.17,
+            x=180,
+            y=232.53,
+        ),
+        tagName="H3",
+        xpath='id("rso")/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/a[1]/h3[1]',
+        textContent="2023 Canada Income Tax Calculator",
+    )
+
     uid_key = "data-webtasks-id"
 
     prev_turn = None
@@ -128,11 +156,29 @@ def main(cfg):
                 html=page,
                 bboxes=bboxes,
                 metadata=metadata,
-                element=next_action["element"],
+                element=element if next_action["element"] else None,
                 scrollX=next_action["args"].get("X"),
                 scrollY=next_action["args"].get("Y"),
+                properties={},
             )
-            logger.info(f"Navigator to perform {prev_turn.intent}")
+
+            if prev_turn.intent == BrowserIntentEnum.load:
+                logger.debug(
+                    f"Navigator {prev_turn.intent} {next_action['args']['url']}"
+                )
+            elif prev_turn.intent == BrowserIntentEnum.scroll:
+                logger.debug(
+                    f"Navigator {prev_turn.intent} to ({prev_turn.scrollX}, {prev_turn.scrollY})"
+                )
+            else:
+                logger.debug(
+                    f"Navigator {prev_turn.intent} element {next_action['element']}"
+                )
+                if not next_action["element"]:
+                    logger.warn(
+                        "Bad predicted action... should discard... setting to prev_turn to None"
+                    )
+                    prev_turn = None
 
 
 if __name__ == "__main__":
