@@ -34,23 +34,6 @@ export const postChat = async (
     zoomLevel,
   };
 
-  // TODO:: Remove if not using or make work
-  // Initialize properties with base properties
-  // let properties: Properties = {
-  //   transitionQualifiers: undefined,
-  //   transitionType: undefined,
-  // };
-  // if (prevTurn?.intent === "load") {
-  //   const { transitionQualifiers, transitionType } = await getNavigationInfo(
-  //     tabId
-  //   );
-  //   properties = {
-  //     ...properties,
-  //     transitionQualifiers,
-  //     transitionType,
-  //   };
-  // }
-
   // Call backend model
 
   return {
