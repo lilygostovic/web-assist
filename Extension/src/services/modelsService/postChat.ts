@@ -21,8 +21,8 @@ export const postChat = async (
 
   // Gather metadata
   const { tabId, url, zoomLevel } = await getTabInfo(); //TODO:: not sure if zoomLevel is being set correctly
-  const { viewportSize, rawHTML } = await getBrowserInfo(tabId);
-  const { html, elementMap } = await processHTML(uidKey, rawHTML); //TODO:: elementMap is always all 0s
+  const { viewportSize, rawHTML, elementsInfo } = await getBrowserInfo(tabId); //TODO:: elementsInfo is returning all 0s for all bbox elements
+  const { html } = await processHTML(uidKey, rawHTML);
   const { mouseX, mouseY } = getMouseCoordinates(); //TODO:: this is not rendering properly
   const metadata = {
     mouseX,

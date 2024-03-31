@@ -1,13 +1,31 @@
-import { BrowserInfo } from "../../types";
+import { BrowserInfo, ElementInfo } from "../../types";
 
 export const getBrowserInfo = async (tabId: number): Promise<BrowserInfo> => {
-  // Get the active tab
+  // Get the active tab and elements info
   const [activeTab] = await chrome.scripting.executeScript({
     target: {
       tabId,
     },
-    func: () => document.documentElement.outerHTML,
+    func: () => {
+      // Get HTML
+      const html = document.documentElement.outerHTML;
+
+      // Get elements TODO:: this method of accessing bboxes from elements is returning all 0s
+      const elements: ElementInfo[] = Array.from(
+        document.querySelectorAll("*")
+      ).map((element) => ({
+        tagName: element.tagName,
+        boundingClientRect: element.getBoundingClientRect(),
+      }));
+
+      return { html, elements };
+    },
   });
+
+  // Type check activeTab
+  if (activeTab.result === undefined) {
+    throw new Error("Active Tab is not available.");
+  }
 
   // Get viewport size
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -22,8 +40,14 @@ export const getBrowserInfo = async (tabId: number): Promise<BrowserInfo> => {
     width: tab.width,
   };
 
+  const elementsInfo: ElementInfo[] = activeTab.result.elements;
+  elementsInfo.forEach((element) => {
+    alert(JSON.stringify(element));
+  });
+
   return {
     viewportSize,
-    rawHTML: activeTab.result as string,
+    rawHTML: activeTab.result.html as string,
+    elementsInfo,
   };
 };
