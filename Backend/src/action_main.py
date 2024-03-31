@@ -126,7 +126,7 @@ def main(cfg):
                 continue
 
             # Case 2.2 Has prev_turn
-            curr_turn = replay.buildInferTurn(turn=prev_turn)
+            curr_turn = replay.remove_lastInferTurn()
 
         # Build prompt & predict action
         action_prompt = action_agent.build_prompt(
@@ -139,9 +139,7 @@ def main(cfg):
             turn=curr_turn, uid_key=uid_key, model_prompt=action_prompt
         )
 
-        # Add the user_intent into replay if it is sya
-        if user_intent.intent == UserIntentEnum.say:
-            replay.addInferTurn(curr_turn)
+        replay.addInferTurn(curr_turn)
 
         # Display our action
         # Mock what the browser does (perform action & return prev_turn)
@@ -163,22 +161,21 @@ def main(cfg):
             )
 
             if prev_turn.intent == BrowserIntentEnum.load:
-                logger.debug(
+                logger.info(
                     f"Navigator {prev_turn.intent} {next_action['args']['url']}"
                 )
             elif prev_turn.intent == BrowserIntentEnum.scroll:
-                logger.debug(
+                logger.info(
                     f"Navigator {prev_turn.intent} to ({prev_turn.scrollX}, {prev_turn.scrollY})"
                 )
             else:
-                logger.debug(
+                logger.info(
                     f"Navigator {prev_turn.intent} element {next_action['element']}"
                 )
+
                 if not next_action["element"]:
-                    logger.warn(
-                        "Bad predicted action... should discard... setting to prev_turn to None"
-                    )
-                    prev_turn = None
+                    prev_turn = replay.remove_lastInferTurn()
+                    logger.warning("Bad predicted action... rolling back prev_turn")
 
 
 if __name__ == "__main__":

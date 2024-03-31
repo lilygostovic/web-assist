@@ -267,7 +267,6 @@ class InferReplay(wl.Replay):
             timestamp=(datetime.now() - self.start).total_seconds(),
             demo_name=self.session_id,
         )
-        self.index += 1
         return result
 
     def addInferTurn(self, turn: InferTurn):
@@ -276,7 +275,9 @@ class InferReplay(wl.Replay):
         """
         # update turn.index if needed
 
+        turn.index = self.index
         self.turns.append(turn)
+        self.index += 1
 
         logging.info(
             f"Added Turn `[{turn.speaker}] - {turn.intent}` into Replay at index {turn.index} "
@@ -288,3 +289,13 @@ class InferReplay(wl.Replay):
         """
         turn = self.buildInferTurn(prev_turn)
         self.addInferTurn(turn)
+
+    def remove_lastInferTurn(self):
+        """Removes the last infer turn"""
+        prev_turn = self.turns.pop()
+        self.index -= 1
+
+        logging.info(
+            f"Removing turn `[{prev_turn.speaker}] - {prev_turn.intent}` from Replay at index {prev_turn.index} "
+        )
+        return prev_turn
