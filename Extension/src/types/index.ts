@@ -25,7 +25,7 @@ type MetaData = {
   zoomLevel: number;
 };
 type Element = {
-  attributes: object;
+  attributes: object; // TODO:: can we add better typing?s
   bbox: {
     bottom: number;
     height: number;
