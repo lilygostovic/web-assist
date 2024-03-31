@@ -1,0 +1,31 @@
+seed: 123
+project_name: WebAssist
+
+uid_key: data-webtasks-id # for testing (need to correlate to what we inject)
+dmr:
+  model: McGill-NLP/MiniLM-L6-dmr
+  max_seq_length: 512
+  use_bf16: True
+  similarity: cos_sim
+  batch_size_per_device: 64
+candidates:
+  k: 10
+  model: ${dmr.model}
+action:
+  model: McGill-NLP/Sheared-LLaMA-2.7B-weblinx
+  batch_size_per_device: 2
+  tokenizer: ${action.model}
+  template_tokenizer: ${action.tokenizer}
+  max_inp_len: null
+  max_out_len: 256
+  use_rope: True
+  use_flash_attention_2: True
+
+hydra:
+  run:
+    dir: ../logs/${project_name}/${hydra.job.name}/${now:%Y-%m-%d-%H:%M:%S}
+  sweep:
+    dir: ${hydra.run.dir}
+  job:
+    chdir: False
+  verbose: INFO
