@@ -6,7 +6,7 @@ from datetime import datetime
 from functools import cached_property, lru_cache
 from typing import Dict, Union
 
-from .schema import BrowserIntentEnum, UserIntent, UserIntentEnum, PrevTurn
+from schema import BrowserIntentEnum, UserIntent, UserIntentEnum, PrevTurn
 
 
 class InferTurn(wl.Turn):

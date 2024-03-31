@@ -3,12 +3,11 @@ import json
 import logging
 import weblinx as wl
 
-from datetime import datetime
 from omegaconf import OmegaConf
 
-from . import ActionAgent
-from .WebLinxHelper import InferReplay
-from .schema import (
+import ActionAgent
+from WebLinxHelper import InferReplay
+from schema import (
     PrevTurn,
     UserIntent,
     UserIntentEnum,
@@ -18,7 +17,7 @@ from .schema import (
 )
 
 
-@hydra.main(version_base=None, config_path="conf", config_name="config")
+@hydra.main(version_base=None, config_path="./", config_name="config")
 def main(cfg):
 
     # Setup logger

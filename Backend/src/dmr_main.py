@@ -5,9 +5,9 @@ import weblinx as wl
 
 from omegaconf import OmegaConf
 
-from . import DMR
-from .WebLinxHelper import InferReplay, InferTurn
-from .schema import PrevTurn, UserIntent
+import DMR
+from WebLinxHelper import InferReplay, InferTurn
+from schema import PrevTurn, UserIntent
 
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")

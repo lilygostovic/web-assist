@@ -180,20 +180,12 @@ class ActionAgent(BaseActionAgent):
         if (turn.type == "chat") and (turn["speaker"] == "instructor"):
             final_user_message = turn["utterance"]
 
-        try:
-
-            model_prompt = self.build_prompt_fn(
-                replay=replay,
-                turn=turn,
-                cands_turn=cands_turn,
-                final_user_message=final_user_message,
-            )
-        except Exception as e:
-
-            logging.info(f"Prompt Build Error.")
-            logging.info(f"{replay}")
-            logging.info(f"Currently at {turn}")
-            logging.info(f"Stack Trace: {traceback.format_exc()}")
+        model_prompt = self.build_prompt_fn(
+            replay=replay,
+            turn=turn,
+            cands_turn=cands_turn,
+            final_user_message=final_user_message,
+        )
 
         insert_empty_user_content_at_first(model_prompt)
         return model_prompt

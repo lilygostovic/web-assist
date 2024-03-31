@@ -172,8 +172,3 @@ class ResponseBody(GettableBaseModel):
     intent: BrowserIntentEnum
     args: Dict[str, Any]
     element: str
-
-
-class ErrorResponse(GettableBaseModel):
-    error: str
-    message: str
