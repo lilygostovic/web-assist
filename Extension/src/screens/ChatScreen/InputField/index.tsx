@@ -4,6 +4,7 @@ import { StyledDiv } from "../../../components";
 import { useModelsService } from "../../../services";
 import { ChatMessage, ModelName, PrevTurn } from "../../../types";
 import { handleResponse } from "./handleResponse";
+import { useMousePosition } from "./useMousePosition";
 
 type InputFieldProps = {
   modelName: ModelName;
@@ -24,6 +25,7 @@ export const InputField = ({
   const [prevTurn, setPrevTurn] = useState<null | PrevTurn>(null);
 
   const { postChat } = useModelsService();
+  const { mousePosition } = useMousePosition();
 
   const blockSubmit = () => {
     // TODO:: improve this error handling, currently it erases the whole chathistory if this runs
@@ -42,7 +44,7 @@ export const InputField = ({
     setModelIsTyping(true);
 
     // Await response from backend
-    const res = await postChat(modelName, text, prevTurn);
+    const res = await postChat(modelName, text, prevTurn, mousePosition);
 
     // Update previous turn
     setPrevTurn(res);

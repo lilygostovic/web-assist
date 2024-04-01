@@ -1,6 +1,7 @@
 import {
   getBrowserInfo,
   getCurrentTabId,
+  getTabInfo,
   injectScript,
 } from "./chromeExtensionsService";
 import { postChat } from "./modelsService";
@@ -10,5 +11,5 @@ export const useModelsService = () => {
 };
 
 export const useChromeExtensionService = () => {
-  return { getBrowserInfo, getCurrentTabId, injectScript };
+  return { getBrowserInfo, getCurrentTabId, getTabInfo, injectScript };
 };

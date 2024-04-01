@@ -1,17 +1,20 @@
+import { useChromeExtensionService } from "../";
 import { ModelName, PrevTurn } from "../../types";
-import { getBrowserInfo } from "../chromeExtensionsService";
-import {
-  generateSessionID,
-  getMouseCoordinates,
-  getTabInfo,
-  processHTML,
-} from "./helper";
+import { generateSessionID, processHTML } from "./helper";
+
+type MousePosition = {
+  x: number;
+  y: number;
+};
 
 export const postChat = async (
   model: ModelName,
   newMessage: string,
-  prevTurn: PrevTurn | null
+  prevTurn: PrevTurn | null,
+  mousePosition: MousePosition
 ): Promise<PrevTurn> => {
+  const { getBrowserInfo, getTabInfo } = useChromeExtensionService();
+
   const userIntent = {
     type: "chat",
     utterance: newMessage,
@@ -23,10 +26,9 @@ export const postChat = async (
   const { tabId, url, zoomLevel } = await getTabInfo();
   const { viewportSize, rawHTML, elementsInfo } = await getBrowserInfo(tabId); //TODO:: elementsInfo is returning all 0s for all bbox elements
   const { html } = await processHTML(uidKey, rawHTML);
-  const { mouseX, mouseY } = getMouseCoordinates(); //TODO:: this is not rendering properly
   const metadata = {
-    mouseX,
-    mouseY,
+    mouseX: mousePosition.x,
+    mouseY: mousePosition.y,
     tabId,
     url,
     viewportHeight: viewportSize.height,

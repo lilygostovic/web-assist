@@ -1,3 +1,5 @@
+// TODO:: put types only used locally back in those files
+
 export type ChatMessage = {
   content: string;
   speaker: "user" | "model";

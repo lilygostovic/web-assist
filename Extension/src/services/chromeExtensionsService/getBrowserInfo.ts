@@ -41,9 +41,9 @@ export const getBrowserInfo = async (tabId: number): Promise<BrowserInfo> => {
   };
 
   const elementsInfo: ElementInfo[] = activeTab.result.elements;
-  elementsInfo.forEach((element) => {
-    alert(JSON.stringify(element));
-  });
+  // elementsInfo.forEach((element, index) => {
+  //   alert("Element " + index + ": " + JSON.stringify(element));
+  // });
 
   return {
     viewportSize,
