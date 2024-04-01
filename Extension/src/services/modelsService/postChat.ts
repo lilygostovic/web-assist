@@ -20,7 +20,7 @@ export const postChat = async (
   const uidKey = "web-assist-id";
 
   // Gather metadata
-  const { tabId, url, zoomLevel } = await getTabInfo(); //TODO:: not sure if zoomLevel is being set correctly
+  const { tabId, url, zoomLevel } = await getTabInfo();
   const { viewportSize, rawHTML, elementsInfo } = await getBrowserInfo(tabId); //TODO:: elementsInfo is returning all 0s for all bbox elements
   const { html } = await processHTML(uidKey, rawHTML);
   const { mouseX, mouseY } = getMouseCoordinates(); //TODO:: this is not rendering properly
@@ -34,7 +34,7 @@ export const postChat = async (
     zoomLevel,
   };
 
-  // Call backend model
+  // TODO:: Call backend model
 
   return {
     // TODO:: remove dummy response

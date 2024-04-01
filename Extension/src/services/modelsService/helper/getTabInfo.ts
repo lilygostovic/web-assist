@@ -21,12 +21,12 @@ export const getTabInfo = async (): Promise<{
     throw new Error("Url is not a string.");
   }
 
-  const [result] = await chrome.scripting.executeScript({
+  const [zoom] = await chrome.scripting.executeScript({
     target: { tabId: tabId },
     func: () => window.devicePixelRatio,
   });
 
-  const zoomFactor = typeof result === "number" ? result : 1;
+  const zoomLevel = typeof zoom.result === "number" ? zoom.result / 2 : 1;
 
-  return { tabId, url, zoomLevel: zoomFactor };
+  return { tabId, url, zoomLevel };
 };
