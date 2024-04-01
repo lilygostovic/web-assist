@@ -1,4 +1,15 @@
-import { BrowserInfo, ElementInfo } from "../../types";
+type ElementInfo = {
+  tagName: string;
+  boundingClientRect: DOMRectReadOnly;
+};
+type BrowserInfo = {
+  viewportSize: {
+    height: number;
+    width: number;
+  };
+  rawHTML: string;
+  elementsInfo: ElementInfo[];
+};
 
 export const getBrowserInfo = async (tabId: number): Promise<BrowserInfo> => {
   // Get the active tab and elements info

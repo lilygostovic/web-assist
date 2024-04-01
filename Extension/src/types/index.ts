@@ -1,5 +1,3 @@
-// TODO:: put types only used locally back in those files
-
 export type ChatMessage = {
   content: string;
   speaker: "user" | "model";
@@ -7,19 +5,6 @@ export type ChatMessage = {
 
 export type ModelName = "GPT-3.5" | "GPT-4";
 export const modelNames: ModelName[] = ["GPT-3.5", "GPT-4"];
-
-export type ElementInfo = {
-  tagName: string;
-  boundingClientRect: DOMRectReadOnly;
-};
-export type BrowserInfo = {
-  viewportSize: {
-    height: number;
-    width: number;
-  };
-  rawHTML: string;
-  elementsInfo: ElementInfo[];
-};
 
 // Previous Turn
 type MetaData = {
@@ -47,7 +32,25 @@ type Element = {
   xpath: string;
   textContent: string;
 };
-export type Properties = {
+type TransitionQualifier =
+  | "client_redirect"
+  | "server_redirect"
+  | "forward_back"
+  | "from_address_bar";
+
+type TransitionType =
+  | "link"
+  | "typed"
+  | "auto_bookmark"
+  | "auto_subframe"
+  | "manual_subframe"
+  | "generated"
+  | "start_page"
+  | "form_submit"
+  | "reload"
+  | "keyword"
+  | "keyword_generated";
+type Properties = {
   transitionQualifiers: undefined | TransitionQualifier[];
   transitionType: undefined | TransitionType;
 };
@@ -81,22 +84,3 @@ export type PrevTurn =
   | ScrollPrevTurn
   | LoadPrevTurn
   | PrevTurnWithElement;
-
-export type TransitionQualifier =
-  | "client_redirect"
-  | "server_redirect"
-  | "forward_back"
-  | "from_address_bar";
-
-export type TransitionType =
-  | "link"
-  | "typed"
-  | "auto_bookmark"
-  | "auto_subframe"
-  | "manual_subframe"
-  | "generated"
-  | "start_page"
-  | "form_submit"
-  | "reload"
-  | "keyword"
-  | "keyword_generated";
