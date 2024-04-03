@@ -6,6 +6,15 @@ export type ChatMessage = {
 export type ModelName = "Sheared LLaMa";
 export const modelNames: ModelName[] = ["Sheared LLaMa"];
 
+export type Intent =
+  | "change"
+  | "click"
+  | "submit"
+  | "textinput"
+  | "load"
+  | "scroll"
+  | "say";
+
 // Previous Turn
 type MetaData = {
   mouseX: number;
@@ -84,3 +93,73 @@ export type PrevTurn =
   | ScrollPrevTurn
   | LoadPrevTurn
   | PrevTurnWithElement;
+
+type ChangeBody = {
+  intent: "change";
+  args: {
+    uid: string;
+  };
+  element: string;
+};
+type ClickBody = {
+  intent: "click";
+  args: {
+    uid: string;
+  };
+  element: string;
+};
+type LoadBody = {
+  intent: "load";
+  args: {
+    url: string;
+  };
+  element: null;
+};
+type SayBody = {
+  intent: "say";
+  args: {
+    utterance: string;
+  };
+  element: null;
+};
+type ScrollBody = {
+  intent: "scroll";
+  args: {
+    x: number;
+    y: number;
+  };
+  element: null;
+};
+type SubmitBody = {
+  intent: "submit";
+  args: {
+    uid: string;
+  };
+  element: string;
+};
+type TextInputBody = {
+  intent: "submit";
+  args: {
+    uid: string;
+    text: string;
+  };
+  element: string;
+};
+type ErrorBody = {
+  error: string;
+  message: string;
+};
+
+export type GetNextActionResponse = {
+  status: 200 | 400 | 404 | 500; // Note: in API docs called http_code
+  // content_type: "application/json";
+  body:
+    | ChangeBody
+    | ClickBody
+    | LoadBody
+    | SayBody
+    | ScrollBody
+    | SubmitBody
+    | TextInputBody
+    | ErrorBody;
+};

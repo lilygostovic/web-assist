@@ -36,7 +36,24 @@ export const postChat = async (
     zoomLevel,
   };
 
-  // TODO:: Call backend model
+  const res = await fetch("https://localhost:8080.com/v1/get_next_action", {
+    method: "POST",
+    body: JSON.stringify({
+      user_intent: userIntent,
+      sessionID,
+      uid_key: uidKey,
+      prev_turn: prevTurn === null ? undefined : prevTurn,
+    }),
+  });
+
+  const json = await res.json();
+
+  console.log(res);
+  console.log(res.body);
+  console.log(res.status);
+  console.log(json);
+
+  // handleAPIResponse(res as GetNextActionResponse);
 
   return {
     // TODO:: remove dummy response
