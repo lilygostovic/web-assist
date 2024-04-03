@@ -5,9 +5,8 @@ import { ChatScreen, WelcomeScreen } from "./screens";
 import { ModelName } from "./types";
 
 function App() {
-  // TODO:: set default to undefined, just like this for ease of testing
   const [chosenModel, setChosenModel] = useState<undefined | ModelName>(
-    "GPT-4"
+    undefined
   );
 
   return (

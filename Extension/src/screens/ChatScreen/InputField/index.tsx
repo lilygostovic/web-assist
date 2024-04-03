@@ -27,14 +27,14 @@ export const InputField = ({
   const { postChat } = useModelsService();
   const { mousePosition } = useMousePosition();
 
-  const blockSubmit = () => {
-    // TODO:: improve this error handling, currently it erases the whole chathistory if this runs
-    alert("Model is loading...");
-  };
+  const handleSubmit = async () => {
+    if (text === "") {
+      alert("Text must not be empty.");
+    }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    // Prevent submission with empty textbox
-    e.preventDefault();
+    if (modelIsTyping) {
+      alert("Model is loading...");
+    }
 
     // Update chat to include user's message
     setHistory([...history, { content: text, speaker: "user" }]);
@@ -58,7 +58,7 @@ export const InputField = ({
   return (
     <StyledDiv display="flex" flexDirection="row" mt="10px">
       <StyledDiv flex={1}>
-        <form onSubmit={modelIsTyping ? blockSubmit : handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             value={text}
@@ -70,7 +70,7 @@ export const InputField = ({
           />
         </form>
       </StyledDiv>
-      <button>send</button>
+      <button onClick={handleSubmit}>send</button>
     </StyledDiv>
   );
 };
