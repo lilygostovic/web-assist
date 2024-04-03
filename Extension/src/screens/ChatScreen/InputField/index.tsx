@@ -27,38 +27,41 @@ export const InputField = ({
   const { postChat } = useModelsService();
   const { mousePosition } = useMousePosition();
 
-  const handleSubmit = async () => {
+  const blockSubmit = () => {
+    // TODO:: improve this error handling, currently it erases the whole chathistory if this runs
+    alert("Model is loading...");
+  };
+
+  const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
+    // Prevent submission with empty textbox
+    e?.preventDefault();
     if (text === "") {
       alert("Text must not be empty.");
+    } else {
+      // Update chat to include user's message
+      setHistory([...history, { content: text, speaker: "user" }]);
+      setText("");
+
+      // Enable loading state
+      setModelIsTyping(true);
+
+      // Await response from backend
+      const res = await postChat(modelName, text, prevTurn, mousePosition);
+
+      // Update previous turn
+      setPrevTurn(res);
+
+      handleResponse({ res, setHistory });
+
+      // Disable loading state
+      setModelIsTyping(false);
     }
-
-    if (modelIsTyping) {
-      alert("Model is loading...");
-    }
-
-    // Update chat to include user's message
-    setHistory([...history, { content: text, speaker: "user" }]);
-    setText("");
-
-    // Enable loading state
-    setModelIsTyping(true);
-
-    // Await response from backend
-    const res = await postChat(modelName, text, prevTurn, mousePosition);
-
-    // Update previous turn
-    setPrevTurn(res);
-
-    handleResponse({ res, setHistory });
-
-    // Disable loading state
-    setModelIsTyping(false);
   };
 
   return (
     <StyledDiv display="flex" flexDirection="row" mt="10px">
       <StyledDiv flex={1}>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={modelIsTyping ? blockSubmit : handleSubmit}>
           <input
             type="text"
             value={text}
@@ -70,7 +73,7 @@ export const InputField = ({
           />
         </form>
       </StyledDiv>
-      <button onClick={handleSubmit}>send</button>
+      <button onClick={() => handleSubmit()}>send</button>
     </StyledDiv>
   );
 };
