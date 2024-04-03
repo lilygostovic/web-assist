@@ -12,7 +12,12 @@ import {
   type TypographyProps,
 } from "styled-system";
 
-export type TextVariant = "title" | "subtitle" | "welcomeText" | "backButton";
+export type TextVariant =
+  | "title"
+  | "subtitle"
+  | "welcomeText"
+  | "backButton"
+  | "continueButton";
 
 type StyledTextProps = {
   variant: TextVariant;
@@ -45,6 +50,16 @@ export const StyledText = styled.text<StyledTextProps>`
         `;
       case "backButton":
         return css`
+          font-weight: 500;
+        `;
+      case "continueButton":
+        return css`
+          color: #a15dc4;
+          font-weight: 500;
+        `;
+      case "disabledContinueButton":
+        return css`
+          color: #c3c3c3;
           font-weight: 500;
         `;
     }

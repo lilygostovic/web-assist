@@ -3,6 +3,7 @@ import { useState } from "react";
 import { StyledDiv } from "../../../components";
 import { useModelsService } from "../../../services";
 import { ChatMessage, ModelName, PrevTurn } from "../../../types";
+import { ContinueButton } from "./ContinueButton";
 import { handleResponse } from "./handleResponse";
 import { useMousePosition } from "./useMousePosition";
 
@@ -59,21 +60,27 @@ export const InputField = ({
   };
 
   return (
-    <StyledDiv display="flex" flexDirection="row" mt="10px">
-      <StyledDiv flex={1}>
-        <form onSubmit={modelIsTyping ? blockSubmit : handleSubmit}>
-          <input
-            type="text"
-            value={text}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setText(e.target.value);
-            }}
-            required
-            style={{ width: "95%" }}
-          />
-        </form>
+    <>
+      <ContinueButton
+        historyExists={history.length !== 0}
+        setModelIsTyping={setModelIsTyping}
+      />
+      <StyledDiv display="flex" flexDirection="row" mt="10px">
+        <StyledDiv flex={1}>
+          <form onSubmit={modelIsTyping ? blockSubmit : handleSubmit}>
+            <input
+              type="text"
+              value={text}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setText(e.target.value);
+              }}
+              required
+              style={{ width: "95%" }}
+            />
+          </form>
+        </StyledDiv>
+        <button onClick={() => handleSubmit()}>send</button>
       </StyledDiv>
-      <button onClick={() => handleSubmit()}>send</button>
-    </StyledDiv>
+    </>
   );
 };

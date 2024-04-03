@@ -2,7 +2,7 @@
 
 import { generateSessionID } from "./helper";
 
-export const continueExecution = () => {
+export const continueExecution = async () => {
   const userIntent = {
     intent: "continue",
   };

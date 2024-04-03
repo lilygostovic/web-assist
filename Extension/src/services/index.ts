@@ -4,10 +4,10 @@ import {
   getTabInfo,
   injectScript,
 } from "./chromeExtensionsService";
-import { postChat } from "./modelsService";
+import { continueExecution, postChat } from "./modelsService";
 
 export const useModelsService = () => {
-  return { postChat };
+  return { continueExecution, postChat };
 };
 
 export const useChromeExtensionService = () => {
