@@ -36,7 +36,7 @@ export const postChat = async (
     zoomLevel,
   };
 
-  const res = await fetch("https://localhost:8080.com/v1/get_next_action", {
+  const res = await fetch("https://localhost:8080/v1/get_next_action", {
     method: "POST",
     body: JSON.stringify({
       user_intent: userIntent,
