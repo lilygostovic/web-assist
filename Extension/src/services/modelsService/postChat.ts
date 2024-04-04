@@ -42,7 +42,7 @@ export const postChat = async (
       user_intent: userIntent,
       sessionID,
       uid_key: uidKey,
-      prev_turn: prevTurn === null ? undefined : prevTurn,
+      prev_turn: prevTurn,
     }),
   });
 
