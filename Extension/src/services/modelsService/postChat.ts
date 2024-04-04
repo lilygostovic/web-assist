@@ -1,6 +1,12 @@
-import { useChromeExtensionService } from "../";
-import { ModelName, PrevTurn } from "../../types";
-import { generateSessionID, processHTML } from "./helper";
+import { useChromeExtensionService } from '../';
+import {
+  ModelName,
+  PrevTurn,
+} from '../../types';
+import {
+  generateSessionID,
+  processHTML,
+} from './helper';
 
 type MousePosition = {
   x: number;
@@ -36,23 +42,26 @@ export const postChat = async (
     zoomLevel,
   };
 
-  const res = await fetch("https://localhost:8080/v1/get_next_action", {
-    method: "POST",
-    body: JSON.stringify({
-      user_intent: userIntent,
-      sessionID,
-      uid_key: uidKey,
-      prev_turn: prevTurn,
-    }),
-  });
+  try {
+    const res = await fetch("https://localhost:8080/v1/get_next_action", {
+      method: "POST",
+      body: JSON.stringify({
+        user_intent: userIntent,
+        sessionID,
+        uid_key: uidKey,
+        prev_turn: prevTurn,
+      }),
+    });
 
-  const json = await res.json();
+    const json = await res.json();
 
-  console.log(res);
-  console.log(res.body);
-  console.log(res.status);
-  console.log(json);
-
+    console.log(res);
+    console.log(res.body);
+    console.log(res.status);
+    console.log(json);
+  } catch (err) {
+    console.log(err);
+  }
   // handleAPIResponse(res as GetNextActionResponse);
 
   return {
