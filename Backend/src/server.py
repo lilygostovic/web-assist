@@ -141,6 +141,9 @@ async def get_next_action(request_body: RequestBody):
 
             # We add the turn
             replay.addInferTurn(curr_turn)
+
+            logger.info(f"Predicted: {next_action}")
+
             return ResponseBody(**next_action)
 
     except Exception as e:
@@ -153,6 +156,6 @@ async def get_next_action(request_body: RequestBody):
 
 if __name__ == "__main__":
     try:
-        uvicorn.run(app)
+        uvicorn.run(app, host="0.0.0.0", port=80)
     except OSError as e:
         print(f"Failed to bind to port: {e}")

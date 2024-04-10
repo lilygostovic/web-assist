@@ -171,4 +171,4 @@ class RequestBody(GettableBaseModel):
 class ResponseBody(GettableBaseModel):
     intent: BrowserIntentEnum
     args: Dict[str, Any]
-    element: str
+    element: Optional[str]
