@@ -1,0 +1,26 @@
+/* styles.css */
+
+/* TODO: Add right color (also update style in components) */
+
+:root {
+    --background-light: #ffffff;
+    --text-light: #000000;
+    --background-dark: #ffffff;
+    --text-dark: #000000;
+    /* --background-dark: #1e1e1e;
+    --text-dark: #ffffff; */
+  }
+
+.app-container {
+    background-color: var(--background-light);
+    /* Default to light theme */
+    color: var(--text-light);
+    /* Default to light theme */
+}
+
+.dark .app-container {
+    background-color: var(--background-dark);
+    /* Dark theme */
+    color: var(--text-dark);
+    /* Dark theme */
+}

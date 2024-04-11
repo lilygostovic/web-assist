@@ -10,7 +10,7 @@ function App() {
   );
 
   return (
-    <StyledDiv width="300px" height="450px" p="4px">
+    <StyledDiv width="100%" height="100%" p="4px" className="app-container">
       {chosenModel === undefined ? (
         <WelcomeScreen modelSetter={setChosenModel} />
       ) : (

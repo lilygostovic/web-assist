@@ -1,10 +1,12 @@
 const path = require("path");
 const HTMLPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: {
     index: "./src/index.tsx",
+    background: "./background.ts",
   },
   mode: "production",
   module: {
@@ -24,7 +26,7 @@ module.exports = {
       {
         exclude: /node_modules/,
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
     ],
   },
@@ -33,6 +35,9 @@ module.exports = {
       patterns: [{ from: "manifest.json", to: "../manifest.json" }],
     }),
     ...getHtmlPlugins(["index"]),
+    new MiniCssExtractPlugin({
+      filename: "styles.css",
+    }),
   ],
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
@@ -41,13 +46,16 @@ module.exports = {
     path: path.join(__dirname, "dist/js"),
     filename: "[name].js",
   },
+  watchOptions: {
+    ignored: ["/node_modules/", "/dist/"], // Optionally, ignore node_modules directory
+  },
 };
 
 function getHtmlPlugins(chunks) {
   return chunks.map(
     (chunk) =>
       new HTMLPlugin({
-        title: "React extension",
+        title: "WebAssist - A LLM-powered Extension",
         filename: `${chunk}.html`,
         chunks: [chunk],
       })
