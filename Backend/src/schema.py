@@ -54,7 +54,7 @@ class Metadata(GettableBaseModel):
     url: str
     viewportHeight: int
     viewportWidth: int
-    zoomLevel: int
+    zoomLevel: float
 
 
 class TransitionProperties(GettableBaseModel):

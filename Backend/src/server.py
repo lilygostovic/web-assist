@@ -7,6 +7,7 @@ import weblinx as wl
 
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from omegaconf import OmegaConf
 from threading import Lock
 from typing import List, Optional, Union
@@ -22,6 +23,16 @@ from schema import (
 from WebLinxHelper import InferReplay
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 ### Setup #############
@@ -88,7 +99,12 @@ async def get_next_action(request_body: RequestBody):
 
             # Add prev turn if exist
             if request_body.prev_turn:
-                replay.build_add_InferTurn(prev_turn=request_body.prev_turn)
+                replay.build_add_InferTurn(
+                    prev_turn=request_body.prev_turn,
+                    html=request_body.html,
+                    bboxes=request_body.bboxes,
+                    metadata=request_body.metadata,
+                )
 
             # Check the user intent
             user_intent = request_body.user_intent
@@ -101,7 +117,12 @@ async def get_next_action(request_body: RequestBody):
 
             # Curr_turn would be from the user or we use the pop the prev_turn in the replay & use
             if user_intent.intent == UserIntentEnum.say:
-                curr_turn = replay.buildInferTurn(turn=user_intent)
+                curr_turn = replay.buildInferTurn(
+                    turn=user_intent,
+                    html=request_body.html,
+                    bboxes=request_body.bboxes,
+                    metadata=request_body.metadata,
+                )
             else:
                 curr_turn = replay.remove_lastInferTurn()
 
@@ -148,9 +169,13 @@ async def get_next_action(request_body: RequestBody):
 
     except Exception as e:
 
+        error_message = f"Something bad happened... {traceback.format_exc()}"
+
+        logger.error(error_message)
+
         raise HTTPException(
             status_code=500,
-            detail=f"Something bad happened... {traceback.format_exc()}",
+            detail=error_message,
         )
 
 

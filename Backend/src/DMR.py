@@ -600,6 +600,7 @@ def build_records(
         record = {
             "uid": elem.attrib[uid_key],
             "doc": elem_str,
+            "elem_dict": elem_dict,
         }
 
         output_records.append(record)

@@ -180,10 +180,13 @@ class ActionAgent(BaseActionAgent):
         if (turn.type == "chat") and (turn["speaker"] == "instructor"):
             final_user_message = turn["utterance"]
 
+        # Sort candidates
+        cands_turn = sorted(cands_turn, key=lambda c: c["rank"])
+
         model_prompt = self.build_prompt_fn(
             replay=replay,
             turn=turn,
-            cands_turn=cands_turn,
+            cands_turn=cands_turn[:20],  # Select top 20 candidates
             final_user_message=final_user_message,
         )
 
