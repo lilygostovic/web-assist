@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import { StyledDiv } from "../../components";
-import { useChromeExtensionService } from "../../services";
 import { ChatMessage, ModelName } from "../../types";
 import { Header } from "./Header";
 import { InputField } from "./InputField";
@@ -15,17 +14,6 @@ type ChatScreenProps = {
 export const ChatScreen = ({ modelName, modelSetter }: ChatScreenProps) => {
   const [history, setHistory] = useState<ChatMessage[]>([]);
   const [modelIsTyping, setModelIsTyping] = useState(false);
-  const [tabId, setTabId] = useState<number | undefined>(undefined);
-
-  const { getCurrentTabId } = useChromeExtensionService();
-
-  getCurrentTabId()
-    .then((tabId) => {
-      setTabId(tabId);
-    })
-    .catch(() => {
-      alert("Error finding tabId.");
-    });
 
   return (
     <StyledDiv height="100%" width="100%">

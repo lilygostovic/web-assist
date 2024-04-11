@@ -1,11 +1,7 @@
-import { useChromeExtensionService } from "../";
-import { ModelName, PrevTurn } from "../../types";
+import { getBrowserInfo } from "../chromeExtensionsService";
+import { ModelName, MousePosition, PrevTurn } from "../../types";
 import { generateSessionID, processHTML } from "./helper";
-
-type MousePosition = {
-  x: number;
-  y: number;
-};
+import { ErrorToast, InfoToast } from "../../components/CustomToast";
 
 export const postChat = async (
   model: ModelName,
@@ -13,32 +9,38 @@ export const postChat = async (
   prevTurn: PrevTurn | null,
   mousePosition: MousePosition
 ): Promise<PrevTurn> => {
-  const { getBrowserInfo, getTabInfo } = useChromeExtensionService();
-
-  const userIntent = {
-    intent: "say",
-    utterance: newMessage,
-  };
+  // TODO: Fix sessionID -> should not change unless we clear conversation
   const sessionID = generateSessionID();
   const uidKey = "web-assist-id";
   const base_url = "http://localhost:8080";
   const API_path = "/v1/get_next_action";
 
-  // Gather metadata
-  const { tabId, url, zoomLevel } = await getTabInfo();
-  const { viewportSize, rawHTML, elementsInfo } = await getBrowserInfo(tabId); //TODO:: elementsInfo is returning all 0s for all bbox elements
-  const { html } = await processHTML(uidKey, rawHTML);
-  const metadata = {
-    mouseX: mousePosition.x,
-    mouseY: mousePosition.y,
-    tabId,
-    url,
-    viewportHeight: viewportSize.height,
-    viewportWidth: viewportSize.width,
-    zoomLevel,
+  const userIntent = {
+    intent: "say",
+    utterance: newMessage,
   };
 
   try {
+    const {
+      tabId,
+      url,
+      viewportHeight,
+      viewportWidth,
+      zoomLevel,
+      html,
+      bboxes,
+    } = await getBrowserInfo(uidKey);
+
+    const metadata = {
+      mouseX: mousePosition.x,
+      mouseY: mousePosition.y,
+      tabId,
+      url,
+      viewportHeight,
+      viewportWidth,
+      zoomLevel,
+    };
+
     const res = await fetch(base_url + API_path, {
       method: "POST",
       headers: {
@@ -50,18 +52,24 @@ export const postChat = async (
         sessionID,
         uid_key: uidKey,
         prev_turn: prevTurn,
+        html: html,
+        metadata: metadata,
+        bboxes: bboxes,
       }),
     });
 
     const response = await res;
     const json = await response.json();
 
-    alert(response.status);
-    alert(JSON.stringify(json));
+    InfoToast({
+      message: `Response: ${response.status} - ${JSON.stringify(json)}`,
+    });
   } catch (err) {
-    console.log(err);
-    alert(err);
+    ErrorToast({
+      message: `Error: ${err}`,
+    });
   }
+
   // handleAPIResponse(res as GetNextActionResponse);
 
   return {

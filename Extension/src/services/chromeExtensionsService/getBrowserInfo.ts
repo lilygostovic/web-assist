@@ -1,64 +1,100 @@
-type ElementInfo = {
-  tagName: string;
-  boundingClientRect: DOMRectReadOnly;
-};
-type BrowserInfo = {
-  viewportSize: {
+import { bottom } from "styled-system";
+import { ErrorToast, InfoToast } from "../../components/CustomToast";
+import { injectScript } from "./injectScript";
+import { electron } from "webpack";
+
+interface Bboxes<> {
+  [key: string]: {
+    bottom: number;
     height: number;
+    left: number;
+    right: number;
+    top: number;
     width: number;
+    x: number;
+    y: number;
   };
-  rawHTML: string;
-  elementsInfo: ElementInfo[];
+}
+
+interface BrowserInfo {
+  tabId: number;
+  url: string;
+  viewportHeight: number;
+  viewportWidth: number;
+  zoomLevel: number;
+  html: string;
+  bboxes: Bboxes;
+}
+
+const generateUID = (): string => {
+  const min = 10000000; // Smallest 8-digit number
+  const max = 99999999; // Largest 8-digit number
+
+  return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
 };
 
-export const getBrowserInfo = async (tabId: number): Promise<BrowserInfo> => {
-  // Get the active tab and elements info
-  const [activeTab] = await chrome.scripting.executeScript({
-    target: {
-      tabId,
-    },
-    func: () => {
-      // Get HTML
-      const html = document.documentElement.outerHTML;
+const tagElementsAndRetrieveBBox = (uidKey: string): Bboxes => {
+  // get all elements
+  const elements = document.querySelectorAll("*");
+  let boundingBoxes: Bboxes = {};
 
-      // Get elements TODO:: this method of accessing bboxes from elements is returning all 0s
-      const elements: ElementInfo[] = Array.from(
-        document.querySelectorAll("*")
-      ).map((element) => ({
-        tagName: element.tagName,
-        boundingClientRect: element.getBoundingClientRect(),
-      }));
+  // Loop through each element and add attribute
+  elements.forEach((element) => {
+    const uid = generateUID();
+    const bbox = element.getBoundingClientRect();
 
-      return { html, elements };
-    },
+    element.setAttribute(uidKey, uid);
+    boundingBoxes[`${uid}`] = {
+      bottom: bbox.bottom,
+      height: bbox.height,
+      left: bbox.left,
+      right: bbox.right,
+      top: bbox.top,
+      width: bbox.width,
+      x: bbox.x,
+      y: bbox.y,
+    };
   });
 
-  // Type check activeTab
-  if (activeTab.result === undefined) {
-    throw new Error("Active Tab is not available.");
+  return boundingBoxes;
+};
+
+export const getBrowserInfo = async (uidKey: string): Promise<BrowserInfo> => {
+  // Defaults
+  let tabId = -1;
+  let url = "";
+  let viewportHeight = -1;
+  let viewportWidth = -1;
+  let zoomLevel = -1;
+  let html = "";
+  let bboxes = {};
+
+  // Get active tab
+  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  zoomLevel = await chrome.tabs.getZoom();
+
+  if (tabs.length === 0) {
+    ErrorToast({ message: "No active tab was found!" });
+  } else {
+    const activeTab = tabs[0];
+    tabId = activeTab.id || tabId;
+    url = activeTab.url || url;
+    viewportHeight = activeTab.height || viewportHeight;
+    viewportWidth = activeTab.width || viewportWidth;
+
+    // Edit current page with the tags + get bounding boxes
+    bboxes = tagElementsAndRetrieveBBox(uidKey);
+    // retrieve HTML after the edit
+    html = document.documentElement.outerHTML;
   }
-
-  // Get viewport size
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
-  // Check if tab is defined
-  if (!tab || typeof tab.height !== "number" || typeof tab.width !== "number") {
-    throw new Error("Viewport size is not available.");
-  }
-
-  const viewportSize = {
-    height: tab.height,
-    width: tab.width,
-  };
-
-  const elementsInfo: ElementInfo[] = activeTab.result.elements;
-  // elementsInfo.forEach((element, index) => {
-  //   alert("Element " + index + ": " + JSON.stringify(element));
-  // });
 
   return {
-    viewportSize,
-    rawHTML: activeTab.result.html as string,
-    elementsInfo,
+    tabId,
+    url,
+    viewportHeight,
+    viewportWidth,
+    zoomLevel,
+    html,
+    bboxes,
   };
 };

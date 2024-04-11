@@ -1,6 +1,9 @@
 /* styles.css */
 
-/* TODO: Add right color (also update style in components) */
+/*
+TODO: Dark mode errors: HTML needs to fill full sidepanel.
+TODO: Dark mode color for other styles need to be assigned.
+*/
 
 :root {
     --background-light: #ffffff;
@@ -24,3 +27,4 @@
     color: var(--text-dark);
     /* Dark theme */
 }
+

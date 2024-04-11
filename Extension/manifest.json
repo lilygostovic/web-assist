@@ -1,5 +1,5 @@
 {
-  "version": "1.15.0",
+  "version": "1.24.0",
   "manifest_version": 3,
   "name": "WebAssist",
   "description": "Browser extension which provides users with a way to converse with Large Language Models towards accomplishing real-world tasks within web browsers.",
@@ -10,14 +10,25 @@
     "default_title": "WebAssist - Click to open panel"
   },
   "permissions": [
-    "sidePanel",
-    "contextMenus",
-    "storage",
-    "scripting",
     "activeTab",
-    "webNavigation"
+    "commands",
+    "contextMenus",
+    "scripting",
+    "sidePanel",
+    "storage",
+    "tabs",
+    "webNavigation",
+    "windows"
   ],
   "background": {
     "service_worker": "js/background.js"
+  },
+  "commands": {
+    "reload_extension": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+L"
+      },
+      "description": "Reload the extension"
+    }
   }
 }

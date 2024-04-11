@@ -11,4 +11,10 @@ chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
   .catch((error) => console.error(error));
 
+chrome.commands.onCommand.addListener(function (command) {
+  if (command === "reload_extension") {
+    chrome.runtime.reload();
+  }
+});
+
 export {};

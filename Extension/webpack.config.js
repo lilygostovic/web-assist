@@ -36,7 +36,8 @@ module.exports = {
     }),
     ...getHtmlPlugins(["index"]),
     new MiniCssExtractPlugin({
-      filename: "styles.css",
+      filename: "[name].css",
+      chunkFilename: "[id].css",
     }),
   ],
   resolve: {

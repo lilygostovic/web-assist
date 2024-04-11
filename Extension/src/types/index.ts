@@ -15,16 +15,11 @@ export type Intent =
   | "scroll"
   | "say";
 
-// Previous Turn
-type MetaData = {
-  mouseX: number;
-  mouseY: number;
-  tabId: number;
-  url: string;
-  viewportHeight: number;
-  viewportWidth: number;
-  zoomLevel: number;
+export type MousePosition = {
+  x: number;
+  y: number;
 };
+
 type Element = {
   attributes: object; // TODO:: can we add better typing?
   bbox: {
@@ -66,26 +61,18 @@ type Properties = {
 type ChatPrevTurn = {
   intent: "say";
   utterance: string;
-  html?: string;
-  metadata?: MetaData;
 };
 type ScrollPrevTurn = {
   intent: "scroll";
-  html: string;
-  metadata: MetaData;
   scrollX: number | undefined;
   scrollY: number | undefined;
 };
 type LoadPrevTurn = {
   intent: "load";
-  html: string;
-  metadata: MetaData;
   properties?: Properties;
 };
 type PrevTurnWithElement = {
   intent: "change" | "click" | "submit" | "textinput";
-  html: string;
-  metadata: MetaData;
   element: Element;
 };
 export type PrevTurn =
