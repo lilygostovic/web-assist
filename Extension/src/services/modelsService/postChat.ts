@@ -1,12 +1,6 @@
-import { useChromeExtensionService } from '../';
-import {
-  ModelName,
-  PrevTurn,
-} from '../../types';
-import {
-  generateSessionID,
-  processHTML,
-} from './helper';
+import { useChromeExtensionService } from "../";
+import { ModelName, PrevTurn } from "../../types";
+import { generateSessionID, processHTML } from "./helper";
 
 type MousePosition = {
   x: number;
@@ -22,11 +16,13 @@ export const postChat = async (
   const { getBrowserInfo, getTabInfo } = useChromeExtensionService();
 
   const userIntent = {
-    type: "chat",
+    intent: "say",
     utterance: newMessage,
   };
   const sessionID = generateSessionID();
   const uidKey = "web-assist-id";
+  const base_url = "http://localhost:8080";
+  const API_path = "/v1/get_next_action";
 
   // Gather metadata
   const { tabId, url, zoomLevel } = await getTabInfo();
@@ -43,8 +39,12 @@ export const postChat = async (
   };
 
   try {
-    const res = await fetch("https://localhost:8080/v1/get_next_action", {
+    const res = await fetch(base_url + API_path, {
       method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         user_intent: userIntent,
         sessionID,
@@ -53,14 +53,14 @@ export const postChat = async (
       }),
     });
 
-    const json = await res.json();
+    const response = await res;
+    const json = await response.json();
 
-    console.log(res);
-    console.log(res.body);
-    console.log(res.status);
-    console.log(json);
+    alert(response.status);
+    alert(JSON.stringify(json));
   } catch (err) {
     console.log(err);
+    alert(err);
   }
   // handleAPIResponse(res as GetNextActionResponse);
 
