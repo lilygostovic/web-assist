@@ -4,9 +4,16 @@ import weblinx as wl
 
 from datetime import datetime
 from functools import cached_property, lru_cache
-from typing import Dict, Union
+from typing import Dict, Optional, Union
 
-from schema import BrowserIntentEnum, UserIntent, UserIntentEnum, PrevTurn
+from schema import (
+    BoundingBox,
+    BrowserIntentEnum,
+    Metadata,
+    UserIntent,
+    UserIntentEnum,
+    PrevTurn,
+)
 
 
 class InferTurn(wl.Turn):
@@ -18,6 +25,9 @@ class InferTurn(wl.Turn):
     def __init__(
         self,
         prev_turn: Union[PrevTurn, UserIntent],
+        html: Optional[str],
+        bboxes: Optional[Dict[str, BoundingBox]],
+        metadata: Optional[Metadata],
         index: int,
         timestamp: float,
         demo_name: str,
@@ -27,6 +37,10 @@ class InferTurn(wl.Turn):
         self.timestamp_ = timestamp
         self.demo_name = demo_name
         self.base_dir = "fake dir"
+
+        self._html = html
+        self._metadata = metadata
+        self._bboxes = bboxes
 
         self.utterance = self.prev_turn.utterance
 
@@ -97,10 +111,7 @@ class InferTurn(wl.Turn):
 
     @property
     def metadata(self) -> dict:
-        if isinstance(self.prev_turn, UserIntent):
-            return None
-        else:
-            return self.prev_turn.metadata
+        return self._metadata
 
     @property
     def client_x(self) -> int:
@@ -126,17 +137,11 @@ class InferTurn(wl.Turn):
 
     @cached_property
     def bboxes(self) -> dict:
-        if isinstance(self.prev_turn, UserIntent):
-            return None
-        else:
-            return self.prev_turn.bboxes
+        return self._bboxes
 
     @cached_property
     def html(self) -> str:
-        if isinstance(self.prev_turn, UserIntent):
-            return None
-        else:
-            return self.prev_turn.html
+        return self._html
 
     @property
     def speaker(self) -> str:
@@ -152,7 +157,7 @@ class InferTurn(wl.Turn):
         raise NotImplementedError
 
     def has_html(self) -> bool:
-        return self.html is not None
+        return self._html is not None
 
     def has_bboxes(self, subdir: str = "bboxes", page_subdir: str = "pages"):
         return self.bboxes is not None
@@ -256,20 +261,32 @@ class InferReplay(wl.Replay):
     def from_demonstration(cls, demonstration: wl.Demonstration):
         raise NotImplementedError
 
-    def buildInferTurn(self, turn: Union[PrevTurn, UserIntent]) -> InferTurn:
+    def buildInferTurn(
+        self,
+        turn: Union[PrevTurn, UserIntent],
+        html: Optional[str],
+        bboxes: Optional[Dict[str, BoundingBox]],
+        metadata: Optional[Metadata],
+    ) -> InferTurn:
         """
         Builds the turn
         **Does not** append to replay
         """
         result = InferTurn(
             prev_turn=turn,
+            html=html,
+            bboxes=bboxes,
+            metadata=metadata,
             index=self.index,
             timestamp=(datetime.now() - self.start).total_seconds(),
             demo_name=self.session_id,
         )
         return result
 
-    def addInferTurn(self, turn: InferTurn):
+    def addInferTurn(
+        self,
+        turn: InferTurn,
+    ):
         """
         Adds Infer Turn into the replay
         """
@@ -283,11 +300,17 @@ class InferReplay(wl.Replay):
             f"Added Turn `[{turn.speaker}] - {turn.intent}` into Replay at index {turn.index} "
         )
 
-    def build_add_InferTurn(self, prev_turn: Union[PrevTurn, UserIntent]):
+    def build_add_InferTurn(
+        self,
+        prev_turn: Union[PrevTurn, UserIntent],
+        html: Optional[str],
+        bboxes: Optional[Dict[str, BoundingBox]],
+        metadata: Optional[Metadata],
+    ):
         """
         Builds the turn & add into the replay
         """
-        turn = self.buildInferTurn(prev_turn)
+        turn = self.buildInferTurn(prev_turn, html, bboxes, metadata)
         self.addInferTurn(turn)
 
     def remove_lastInferTurn(self):

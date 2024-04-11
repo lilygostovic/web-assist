@@ -77,9 +77,6 @@ class BrowserIntentEnum(str, Enum):
 class PrevTurn(GettableBaseModel):
     intent: BrowserIntentEnum
 
-    html: Optional[str] = None
-    bboxes: Optional[Dict[str, BoundingBox]] = None
-    metadata: Optional[Metadata] = None
     element: Optional[Element] = None
 
     properties: Optional[TransitionProperties] = None
@@ -101,6 +98,10 @@ class RequestBody(GettableBaseModel):
     sessionID: str
     uid_key: str
     prev_turn: Optional[PrevTurn] = None
+
+    html: Optional[str] = None
+    bboxes: Optional[Dict[str, BoundingBox]] = None
+    metadata: Optional[Metadata] = None
 
     @model_validator(mode="after")
     def validate_utterance_in_user_say_intent(self):
@@ -137,12 +138,11 @@ class RequestBody(GettableBaseModel):
             BrowserIntentEnum.textInput,
         ]
         if intent in browser_intents:
-            if not self.prev_turn.html:
+            if not self.html:
                 raise_field_error("html", "prev_turn", intent)
-            if not self.prev_turn.bboxes:
+            if not self.bboxes:
                 raise_field_error("bboxes", "prev_turn", intent)
-
-            if not self.prev_turn.metadata:
+            if not self.metadata:
                 raise_field_error("metadata", "prev_turn", intent)
 
         # Check for element
