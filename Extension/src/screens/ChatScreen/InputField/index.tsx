@@ -78,7 +78,14 @@ export const InputField = ({
   };
 
   return (
-    <>
+    <StyledDiv
+      display="flex"
+      flexDirection="column"
+      position="fixed"
+      bottom="0"
+      width="95%"
+      mb="15px"
+    >
       <ContinueButton
         model={model}
         sessionID={sessionID}
@@ -106,6 +113,6 @@ export const InputField = ({
           send
         </button>
       </StyledDiv>
-    </>
+    </StyledDiv>
   );
 };
