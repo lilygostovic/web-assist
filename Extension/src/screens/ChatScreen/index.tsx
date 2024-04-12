@@ -1,15 +1,15 @@
 import { useRef, useState } from "react";
 
 import { StyledDiv, StyledText } from "../../components";
-import { ChatMessage, ModelName } from "../../types";
+import { ChatMessage } from "../../types";
 import { Header } from "./Header";
 import { InputField } from "./InputField";
 import { MessageHistory } from "./MessageHistory";
 import { generateSessionID } from "./InputField/helper";
 
 type ChatScreenProps = {
-  model: ModelName;
-  modelSetter: React.Dispatch<React.SetStateAction<ModelName | undefined>>;
+  model: string;
+  modelSetter: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
@@ -19,11 +19,13 @@ export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
   const uidKey = "web-assist-id";
 
   return (
-    <StyledDiv height="100%" width="100%">
-      <Header model={model} modelSetter={modelSetter} />
-      <StyledDiv display="flex" width="100%" justifyContent="center">
-        <StyledText variant="subtitle">Session {sessionID}</StyledText>
-      </StyledDiv>
+    <StyledDiv height="95%" width="100%">
+      <Header
+        model={model}
+        modelSetter={modelSetter}
+        sessionID={sessionID}
+        sessionSetter={setSessionID}
+      />
       <StyledDiv
         width="100%"
         height="85%"

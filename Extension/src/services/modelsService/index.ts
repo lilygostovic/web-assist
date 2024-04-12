@@ -1,9 +1,9 @@
 import { getBrowserInfo } from "../chromeExtensionsService";
-import { ModelName, MousePosition, PrevTurn, ResponseBody } from "../../types";
+import { MousePosition, PrevTurn, ResponseBody } from "../../types";
 import { InfoToast } from "../../components/CustomToast";
 
 const requestNextAction = async (
-  model: ModelName,
+  model: string,
   sessionID: string,
   uidKey: string,
   userIntent: { [key: string]: string },
@@ -52,7 +52,7 @@ const requestNextAction = async (
 };
 
 export const continueExecution = async (
-  model: ModelName,
+  model: string,
   sessionID: string,
   uidKey: string,
   prevTurn: PrevTurn | null,
@@ -72,7 +72,7 @@ export const continueExecution = async (
 };
 
 export const postChat = async (
-  model: ModelName,
+  model: string,
   sessionID: string,
   uidKey: string,
   newMessage: string,

@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 
 import { StyledDiv, StyledText } from "../../../components";
-import { ModelName, MousePosition, PrevTurn } from "../../../types";
+import { MousePosition, PrevTurn } from "../../../types";
 import { useModelsService } from "../../../services";
 
 const StyledButtonDiv = styled.div`
@@ -13,7 +13,7 @@ const StyledButtonDiv = styled.div`
 `;
 
 type ContinueButtonProps = {
-  model: ModelName;
+  model: string;
   sessionID: string;
   uidKey: string;
   historyExists: boolean;

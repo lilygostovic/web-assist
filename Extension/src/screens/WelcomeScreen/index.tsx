@@ -1,12 +1,12 @@
-import { ModelName, modelNames } from "../../types";
+import { ModelNames } from "../../types";
 import { StyledDiv, StyledText } from "../../components";
 
 type ModelButtonProps = {
-  modelName: ModelName;
-  modelSetter: React.Dispatch<React.SetStateAction<ModelName | undefined>>;
+  model: string;
+  modelSetter: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
-const ModelButton = ({ modelName, modelSetter }: ModelButtonProps) => (
+const ModelButton = ({ model, modelSetter }: ModelButtonProps) => (
   <StyledDiv
     display="flex"
     flexDirection="column"
@@ -17,15 +17,15 @@ const ModelButton = ({ modelName, modelSetter }: ModelButtonProps) => (
     my="6px"
     py="10px"
     onClick={() => {
-      modelSetter(modelName);
+      modelSetter(model);
     }}
   >
-    <StyledText color="white">{modelName}</StyledText>
+    <StyledText color="white">{model}</StyledText>
   </StyledDiv>
 );
 
 type WelcomeScreenProps = {
-  modelSetter: React.Dispatch<React.SetStateAction<ModelName | undefined>>;
+  modelSetter: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 export const WelcomeScreen = ({ modelSetter }: WelcomeScreenProps) => {
@@ -51,8 +51,8 @@ export const WelcomeScreen = ({ modelSetter }: WelcomeScreenProps) => {
         alignItems="center"
         my="45px"
       >
-        {modelNames.map((modelName) => (
-          <ModelButton modelName={modelName} modelSetter={modelSetter} />
+        {ModelNames.map((model) => (
+          <ModelButton model={model} modelSetter={modelSetter} />
         ))}
       </StyledDiv>
       <StyledText variant="welcomeText">

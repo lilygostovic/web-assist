@@ -2,13 +2,13 @@ import { useState } from "react";
 
 import { StyledDiv, ErrorToast, InfoToast } from "../../../components";
 import { useModelsService } from "../../../services";
-import { ChatMessage, ModelName, PrevTurn, ResponseBody } from "../../../types";
+import { ChatMessage, PrevTurn, ResponseBody } from "../../../types";
 import { ContinueButton } from "./ContinueButton";
 import { handleResponse } from "./handleResponse";
 import { useMousePosition } from "./useMousePosition";
 
 type InputFieldProps = {
-  model: ModelName;
+  model: string;
   sessionID: string;
   uidKey: string;
   history: ChatMessage[];

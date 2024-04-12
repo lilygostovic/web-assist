@@ -2,9 +2,7 @@ export type ChatMessage = {
   content: string;
   speaker: "user" | "model";
 };
-
-export type ModelName = "Sheared LLaMa";
-export const modelNames: ModelName[] = ["Sheared LLaMa"];
+export const ModelNames: string[] = ["Sheared LLaMa"];
 
 export type Intent =
   | "change"
