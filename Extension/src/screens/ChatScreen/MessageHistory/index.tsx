@@ -29,11 +29,15 @@ export const MessageHistory = ({
   return (
     <StyledDiv
       ref={messageHistoryRef}
-      width="300px"
-      height="400px"
-      overflow="auto"
-      flex={1}
+      width="100%"
+      height="100%"
+      style={{ overflowY: "auto" }}
+      display="flex"
+      flex="1"
+      flexDirection="column-reverse"
     >
+      {modelIsTyping && <ChatBubble isLoading />}
+
       {history.map((chatMessage, index) => (
         <ChatBubble
           key={index}
@@ -41,8 +45,6 @@ export const MessageHistory = ({
           isModel={chatMessage.speaker === "model"}
         />
       ))}
-
-      {modelIsTyping && <ChatBubble isLoading />}
     </StyledDiv>
   );
 };

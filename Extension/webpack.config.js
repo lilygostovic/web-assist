@@ -24,9 +24,23 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        exclude: /node_modules/,
         test: /\.css$/i,
+        exclude: /node_modules/,
         use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif|svg)$/i,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 8192,
+              name: "[name].[ext]", // Output file name
+              outputPath: "images/", // Output directory
+            },
+          },
+        ],
       },
     ],
   },

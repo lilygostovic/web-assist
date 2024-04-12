@@ -33,6 +33,7 @@ const generateUID = (): string => {
   return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
 };
 
+// TODO: Check if the document is referring to the react document / html page of the tab.
 const tagElementsAndRetrieveBBox = (uidKey: string): Bboxes => {
   // get all elements
   const elements = document.querySelectorAll("*");

@@ -8,8 +8,8 @@ type HandleResponseProps = {
 export const handleResponse = ({ res, setHistory }: HandleResponseProps) => {
   if (res.intent === "say") {
     setHistory((prevHistory) => [
-      ...prevHistory,
       { speaker: "model", content: res.utterance },
+      ...prevHistory,
     ]);
   } else if (res.intent === "scroll") {
     // handle scroll actions

@@ -58,11 +58,10 @@ export const postChat = async (
       }),
     });
 
-    const response = await res;
-    const json = await response.json();
+    const json = await res.json();
 
     InfoToast({
-      message: `Response: ${response.status} - ${JSON.stringify(json)}`,
+      message: `Response: ${res.status} - ${JSON.stringify(json)}`,
     });
   } catch (err) {
     ErrorToast({

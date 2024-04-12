@@ -40,7 +40,7 @@ export const InputField = ({
       alert("Text must not be empty.");
     } else {
       // Update chat to include user's message
-      setHistory([...history, { content: text, speaker: "user" }]);
+      setHistory([{ content: text, speaker: "user" }, ...history]);
       setText("");
 
       // Enable loading state
