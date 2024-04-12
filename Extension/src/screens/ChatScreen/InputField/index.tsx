@@ -37,6 +37,15 @@ export const InputField = ({
     ErrorToast({ message: "Model is loading..." });
   };
 
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    // Perform actions when the button is clicked
+    event.preventDefault(); // Prevent the default behavior of the button
+    const form = event.currentTarget.form; // Get the form element
+    if (form) {
+      form.submit(); // Submit the form
+    }
+  };
+
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     // Prevent submission with empty textbox
     e?.preventDefault();
@@ -87,44 +96,53 @@ export const InputField = ({
       mb="15px"
     >
       {/* TODO: change button to be invisible if no history, disabled when model is typing */}
-      <ContinueButton
-        model={model}
-        sessionID={sessionID}
-        uidKey={uidKey}
-        historyExists={history.length !== 0}
-        prevTurn={prevTurn}
-        mousePosition={mousePosition}
-        setModelIsTyping={setModelIsTyping}
-      />
-      <StyledDiv display="flex" flexDirection="row" mt="10px">
-        <StyledDiv flex={1}>
-          <form onSubmit={modelIsTyping ? blockSubmit : handleSubmit}>
-            <input
-              type="text"
-              value={text}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setText(e.target.value);
-              }}
-              required
-              placeholder={text ? "" : "Message Web Assist..."}
-              style={{ width: "95%" }}
-            />
-          </form>
-        </StyledDiv>
-        <button
-          type="submit"
-          disabled={modelIsTyping}
-          style={{
-            // Customize select element style
-            border: "none",
-            background: "transparent",
-            color: modelIsTyping ? "#c3c3c3" : "#a15dc4",
-            textAlign: "center",
-            cursor: modelIsTyping ? "not-allowed" : "pointer",
-          }}
+
+      {history.length === 0 ? (
+        <></>
+      ) : (
+        <ContinueButton
+          model={model}
+          sessionID={sessionID}
+          uidKey={uidKey}
+          historyExists={history.length !== 0}
+          prevTurn={prevTurn}
+          mousePosition={mousePosition}
+          modelIsTyping={modelIsTyping}
+          setModelIsTyping={setModelIsTyping}
+        />
+      )}
+
+      <StyledDiv display="flex" flexDirection="column" mt="10px" width="100%">
+        <form
+          onSubmit={modelIsTyping ? blockSubmit : handleSubmit}
+          style={{ width: "100%", display: "flex", alignItems: "center" }}
         >
-          send
-        </button>
+          <input
+            type="text"
+            value={text}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setText(e.target.value);
+            }}
+            required
+            placeholder={text ? "" : "Message Web Assist..."}
+            style={{ width: "95%" }}
+          />
+
+          <button
+            type="submit"
+            disabled={modelIsTyping}
+            style={{
+              // Customize select element style
+              border: "none",
+              background: "transparent",
+              color: modelIsTyping ? "#c3c3c3" : "#a15dc4",
+              textAlign: "center",
+              cursor: modelIsTyping ? "not-allowed" : "pointer",
+            }}
+          >
+            send
+          </button>
+        </form>
       </StyledDiv>
     </StyledDiv>
   );

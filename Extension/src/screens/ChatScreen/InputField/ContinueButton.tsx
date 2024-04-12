@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-import { StyledDiv, StyledText } from "../../../components";
+import { StyledDiv, StyledText, ErrorToast } from "../../../components";
 import { MousePosition, PrevTurn } from "../../../types";
 import { useModelsService } from "../../../services";
 
@@ -19,6 +19,7 @@ type ContinueButtonProps = {
   historyExists: boolean;
   prevTurn: PrevTurn | null;
   mousePosition: MousePosition;
+  modelIsTyping: boolean;
   setModelIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -29,9 +30,14 @@ export const ContinueButton = ({
   historyExists,
   prevTurn,
   mousePosition,
+  modelIsTyping,
   setModelIsTyping,
 }: ContinueButtonProps) => {
   const { continueExecution } = useModelsService();
+
+  const blockContinue = () => {
+    ErrorToast({ message: "Model is loading..." });
+  };
 
   const handleClick = async () => {
     setModelIsTyping(true);
@@ -43,9 +49,9 @@ export const ContinueButton = ({
 
   return (
     <StyledDiv display="flex" justifyContent="center" mt="10px">
-      <StyledButtonDiv onClick={historyExists ? handleClick : () => {}}>
+      <StyledButtonDiv onClick={modelIsTyping ? blockContinue : handleClick}>
         <StyledText
-          variant={historyExists ? "continueButton" : "disabledContinueButton"}
+          variant={modelIsTyping ? "disabledContinueButton" : "continueButton"}
         >
           continue...
         </StyledText>
