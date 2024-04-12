@@ -86,6 +86,7 @@ export const InputField = ({
       width="95%"
       mb="15px"
     >
+      {/* TODO: change button to be invisible if no history, disabled when model is typing */}
       <ContinueButton
         model={model}
         sessionID={sessionID}
@@ -119,6 +120,7 @@ export const InputField = ({
             background: "transparent",
             color: modelIsTyping ? "#c3c3c3" : "#a15dc4",
             textAlign: "center",
+            cursor: modelIsTyping ? "not-allowed" : "pointer",
           }}
         >
           send
