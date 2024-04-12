@@ -37,15 +37,6 @@ export const InputField = ({
     ErrorToast({ message: "Model is loading..." });
   };
 
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-    // Perform actions when the button is clicked
-    event.preventDefault(); // Prevent the default behavior of the button
-    const form = event.currentTarget.form; // Get the form element
-    if (form) {
-      form.submit(); // Submit the form
-    }
-  };
-
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     // Prevent submission with empty textbox
     e?.preventDefault();
