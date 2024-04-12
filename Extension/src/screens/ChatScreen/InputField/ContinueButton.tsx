@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
 
 import { StyledDiv, StyledText } from "../../../components";
+import { ModelName, MousePosition, PrevTurn } from "../../../types";
 import { useModelsService } from "../../../services";
 
 const StyledButtonDiv = styled.div`
@@ -12,12 +13,22 @@ const StyledButtonDiv = styled.div`
 `;
 
 type ContinueButtonProps = {
+  model: ModelName;
+  sessionID: string;
+  uidKey: string;
   historyExists: boolean;
+  prevTurn: PrevTurn | null;
+  mousePosition: MousePosition;
   setModelIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const ContinueButton = ({
+  model,
+  sessionID,
+  uidKey,
   historyExists,
+  prevTurn,
+  mousePosition,
   setModelIsTyping,
 }: ContinueButtonProps) => {
   const { continueExecution } = useModelsService();
@@ -25,7 +36,7 @@ export const ContinueButton = ({
   const handleClick = async () => {
     setModelIsTyping(true);
 
-    await continueExecution();
+    await continueExecution(model, sessionID, uidKey, prevTurn, mousePosition);
 
     setModelIsTyping(false);
   };

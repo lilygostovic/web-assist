@@ -2,11 +2,11 @@ import { ModelName } from "../../types";
 import { StyledDiv, StyledText } from "../../components";
 
 type HeaderProps = {
-  modelName: ModelName;
+  model: ModelName;
   modelSetter: React.Dispatch<React.SetStateAction<ModelName | undefined>>;
 };
 
-export const Header = ({ modelName, modelSetter }: HeaderProps) => (
+export const Header = ({ model, modelSetter }: HeaderProps) => (
   <>
     <StyledDiv
       display="flex"
@@ -23,7 +23,7 @@ export const Header = ({ modelName, modelSetter }: HeaderProps) => (
       </StyledDiv>
     </StyledDiv>
     <StyledDiv display="flex" width="100%" justifyContent="center">
-      <StyledText variant="subtitle">{modelName}</StyledText>
+      <StyledText variant="subtitle">{model}</StyledText>
     </StyledDiv>
   </>
 );

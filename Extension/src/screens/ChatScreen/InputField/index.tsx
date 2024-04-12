@@ -8,7 +8,9 @@ import { handleResponse } from "./handleResponse";
 import { useMousePosition } from "./useMousePosition";
 
 type InputFieldProps = {
-  modelName: ModelName;
+  model: ModelName;
+  sessionID: string;
+  uidKey: string;
   history: ChatMessage[];
   modelIsTyping: boolean;
   setHistory: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
@@ -16,7 +18,9 @@ type InputFieldProps = {
 };
 
 export const InputField = ({
-  modelName,
+  model,
+  sessionID,
+  uidKey,
   history,
   modelIsTyping,
   setHistory,
@@ -47,7 +51,14 @@ export const InputField = ({
       setModelIsTyping(true);
 
       // Await response from backend
-      const res = await postChat(modelName, text, prevTurn, mousePosition);
+      const res = await postChat(
+        model,
+        sessionID,
+        uidKey,
+        text,
+        prevTurn,
+        mousePosition
+      );
 
       // Update previous turn
       setPrevTurn(res);
@@ -62,7 +73,12 @@ export const InputField = ({
   return (
     <>
       <ContinueButton
+        model={model}
+        sessionID={sessionID}
+        uidKey={uidKey}
         historyExists={history.length !== 0}
+        prevTurn={prevTurn}
+        mousePosition={mousePosition}
         setModelIsTyping={setModelIsTyping}
       />
       <StyledDiv display="flex" flexDirection="row" mt="10px">

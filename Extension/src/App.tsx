@@ -16,7 +16,7 @@ function App() {
       {chosenModel === undefined ? (
         <WelcomeScreen modelSetter={setChosenModel} />
       ) : (
-        <ChatScreen modelName={chosenModel} modelSetter={setChosenModel} />
+        <ChatScreen model={chosenModel} modelSetter={setChosenModel} />
       )}
       <ToastContainer position="top-right" closeOnClick newestOnTop={true} />
     </StyledDiv>
