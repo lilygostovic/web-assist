@@ -4,7 +4,7 @@ import { generateSessionID } from "./InputField/helper";
 
 type HeaderProps = {
   model: string;
-  modelSetter: React.Dispatch<React.SetStateAction<string | undefined>>;
+  modelSetter: React.Dispatch<React.SetStateAction<string>>;
   sessionID: string;
   sessionSetter: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -49,18 +49,24 @@ export const Header = ({
     <StyledDiv
       display="flex"
       width="100%"
+      alignItems="center"
       justifyContent="center"
       flexDirection="column"
     >
-      <StyledText variant="title">Web Assist</StyledText>
-      <StyledText variant="subtitle">Session {sessionID}</StyledText>
+      <span
+        title="WebAssist is an innovative browser extension designed to enable users to converse with Large Language Models towards accomplishing real-world tasks within web browsers."
+        style={{ cursor: "help" }}
+      >
+        <StyledText variant="title">Web Assist</StyledText>
+      </span>
+      <StyledText variant="welcomeText">Session {sessionID}</StyledText>
     </StyledDiv>
 
     <StyledDiv
       onClick={() => sessionSetter(generateSessionID())}
       style={{ marginLeft: "auto", whiteSpace: "nowrap" }}
     >
-      <StyledText variant="homeButton">New Session</StyledText>
+      <StyledText variant="subtitle">New Session</StyledText>
     </StyledDiv>
   </StyledDiv>
 );

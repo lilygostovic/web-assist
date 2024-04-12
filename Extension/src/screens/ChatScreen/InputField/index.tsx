@@ -105,6 +105,7 @@ export const InputField = ({
                 setText(e.target.value);
               }}
               required
+              placeholder={text ? "" : "Message Web Assist..."}
               style={{ width: "95%" }}
             />
           </form>

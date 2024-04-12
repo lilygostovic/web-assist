@@ -3,13 +3,14 @@ import { useRef, useState } from "react";
 import { StyledDiv, StyledText } from "../../components";
 import { ChatMessage } from "../../types";
 import { Header } from "./Header";
+import { EmptyMessage } from "./EmptyMessage";
 import { InputField } from "./InputField";
 import { MessageHistory } from "./MessageHistory";
 import { generateSessionID } from "./InputField/helper";
 
 type ChatScreenProps = {
   model: string;
-  modelSetter: React.Dispatch<React.SetStateAction<string | undefined>>;
+  modelSetter: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
@@ -32,7 +33,12 @@ export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
         display="flex"
         flexDirection="column"
       >
-        <MessageHistory history={history} modelIsTyping={modelIsTyping} />
+        {history.length === 0 ? (
+          <EmptyMessage />
+        ) : (
+          <MessageHistory history={history} modelIsTyping={modelIsTyping} />
+        )}
+
         <InputField
           model={model}
           sessionID={sessionID}

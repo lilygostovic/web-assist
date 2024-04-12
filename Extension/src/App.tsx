@@ -1,22 +1,16 @@
 import { useState } from "react";
 import { StyledDiv } from "./components";
-import { ChatScreen, WelcomeScreen } from "./screens";
+import { ChatScreen } from "./screens";
 
 import { ToastContainer } from "react-toastify";
 import "./toast.css";
 
 function App() {
-  const [chosenModel, setChosenModel] = useState<string | undefined>(
-    "Sheared LLaMa"
-  );
+  const [chosenModel, setChosenModel] = useState<string>("Sheared LLaMa");
 
   return (
     <StyledDiv width="100%" height="100vh" p="4px" className="app-container">
-      {chosenModel === undefined ? (
-        <WelcomeScreen modelSetter={setChosenModel} />
-      ) : (
-        <ChatScreen model={chosenModel} modelSetter={setChosenModel} />
-      )}
+      <ChatScreen model={chosenModel} modelSetter={setChosenModel} />
       <ToastContainer position="top-right" closeOnClick newestOnTop={true} />
     </StyledDiv>
   );
