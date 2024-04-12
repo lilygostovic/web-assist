@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { StyledDiv } from "../../../components";
+import { StyledDiv, ErrorToast, InfoToast } from "../../../components";
 import { useModelsService } from "../../../services";
-import { ChatMessage, ModelName, PrevTurn } from "../../../types";
+import { ChatMessage, ModelName, PrevTurn, ResponseBody } from "../../../types";
 import { ContinueButton } from "./ContinueButton";
 import { handleResponse } from "./handleResponse";
 import { useMousePosition } from "./useMousePosition";
@@ -32,25 +32,29 @@ export const InputField = ({
   const { postChat } = useModelsService();
   const { mousePosition } = useMousePosition();
 
-  const blockSubmit = () => {
-    // TODO:: improve this error handling, currently it erases the whole chathistory if this runs
-    alert("Model is loading...");
+  const blockSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
+    ErrorToast({ message: "Model is loading..." });
   };
 
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     // Prevent submission with empty textbox
     e?.preventDefault();
+
+    // If still empty text, we just do nothing.
     if (text === "") {
-      alert("Text must not be empty.");
-    } else {
-      // Update chat to include user's message
-      setHistory([{ content: text, speaker: "user" }, ...history]);
-      setText("");
+      return;
+    }
 
-      // Enable loading state
-      setModelIsTyping(true);
+    // Update chat history, empty text field.
+    setHistory([{ content: text, speaker: "user" }, ...history]);
+    setText("");
 
-      // Await response from backend
+    // Model to load
+    setModelIsTyping(true);
+
+    // try to get response from backend
+    try {
       const res = await postChat(
         model,
         sessionID,
@@ -60,14 +64,17 @@ export const InputField = ({
         mousePosition
       );
 
-      // Update previous turn
-      setPrevTurn(res);
+      // // perform action
+      // handleResponse({ res, setHistory });
 
-      handleResponse({ res, setHistory });
-
-      // Disable loading state
-      setModelIsTyping(false);
+      // // update prev_turn
+      // setPrevTurn(res);
+    } catch (err) {
+      ErrorToast({ message: `Error: ${err}` });
     }
+
+    // Disable loading state
+    setModelIsTyping(false);
   };
 
   return (
@@ -95,7 +102,9 @@ export const InputField = ({
             />
           </form>
         </StyledDiv>
-        <button onClick={() => handleSubmit()}>send</button>
+        <button type="submit" disabled={modelIsTyping}>
+          send
+        </button>
       </StyledDiv>
     </>
   );

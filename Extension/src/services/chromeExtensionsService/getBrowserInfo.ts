@@ -1,7 +1,5 @@
-import { bottom } from "styled-system";
 import { ErrorToast, InfoToast } from "../../components/CustomToast";
 import { injectScript } from "./injectScript";
-import { electron } from "webpack";
 
 interface Bboxes<> {
   [key: string]: {

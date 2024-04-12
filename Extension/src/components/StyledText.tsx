@@ -48,7 +48,7 @@ export const StyledText = styled.text<StyledTextProps>`
           line-height: 1.5;
           color: #424242;
         `;
-      case "backButton":
+      case "homeButton":
         return css`
           font-weight: 500;
         `;

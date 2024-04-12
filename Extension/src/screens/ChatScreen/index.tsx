@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-import { StyledDiv } from "../../components";
+import { StyledDiv, StyledText } from "../../components";
 import { ChatMessage, ModelName } from "../../types";
 import { Header } from "./Header";
 import { InputField } from "./InputField";
@@ -15,16 +15,18 @@ type ChatScreenProps = {
 export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
   const [history, setHistory] = useState<ChatMessage[]>([]);
   const [modelIsTyping, setModelIsTyping] = useState(false);
-
-  const sessionID = generateSessionID();
+  const [sessionID, setSessionID] = useState(generateSessionID()); // Initialize sessionID once
   const uidKey = "web-assist-id";
 
   return (
     <StyledDiv height="100%" width="100%">
       <Header model={model} modelSetter={modelSetter} />
+      <StyledDiv display="flex" width="100%" justifyContent="center">
+        <StyledText variant="subtitle">Session {sessionID}</StyledText>
+      </StyledDiv>
       <StyledDiv
-        height="90%"
         width="100%"
+        height="85%"
         display="flex"
         flexDirection="column"
       >

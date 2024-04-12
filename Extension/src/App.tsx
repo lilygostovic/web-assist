@@ -8,7 +8,7 @@ import "./toast.css";
 
 function App() {
   const [chosenModel, setChosenModel] = useState<undefined | ModelName>(
-    undefined
+    "Sheared LLaMa"
   );
 
   return (
