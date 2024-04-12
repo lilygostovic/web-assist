@@ -110,7 +110,17 @@ export const InputField = ({
             />
           </form>
         </StyledDiv>
-        <button type="submit" disabled={modelIsTyping}>
+        <button
+          type="submit"
+          disabled={modelIsTyping}
+          style={{
+            // Customize select element style
+            border: "none",
+            background: "transparent",
+            color: modelIsTyping ? "#c3c3c3" : "#a15dc4",
+            textAlign: "center",
+          }}
+        >
           send
         </button>
       </StyledDiv>

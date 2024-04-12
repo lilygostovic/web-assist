@@ -26,6 +26,7 @@ export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
         modelSetter={modelSetter}
         sessionID={sessionID}
         sessionSetter={setSessionID}
+        historySetter={setHistory}
       />
       <StyledDiv
         width="100%"

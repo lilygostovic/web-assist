@@ -1,4 +1,4 @@
-import { ModelNames } from "../../types";
+import { ModelNames, ChatMessage } from "../../types";
 import { StyledDiv, StyledText } from "../../components";
 import { generateSessionID } from "./InputField/helper";
 
@@ -7,6 +7,7 @@ type HeaderProps = {
   modelSetter: React.Dispatch<React.SetStateAction<string>>;
   sessionID: string;
   sessionSetter: React.Dispatch<React.SetStateAction<string>>;
+  historySetter: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
 };
 
 export const Header = ({
@@ -14,59 +15,67 @@ export const Header = ({
   modelSetter,
   sessionID,
   sessionSetter,
-}: HeaderProps) => (
-  <StyledDiv
-    height="7vh"
-    display="flex"
-    flexDirection="row"
-    alignItems="center"
-    justifyContent="space-between"
-    mb="4px"
-    position="sticky" // Make the header sticky
-    top="0" // Stick it to the top of the viewport
-    zIndex="999" // Ensure it's above other content
-  >
-    <select
-      value={model}
-      onChange={(e) => modelSetter(e.target.value)}
-      style={{
-        // Customize select element style
-        border: "none",
-        background: "transparent",
-        padding: "0.5rem",
-        fontWeight: "500",
-        color: "#a15dc4",
-        textAlign: "center",
-      }}
-    >
-      {ModelNames.map((model) => (
-        <option key={model} value={model}>
-          {model}
-        </option>
-      ))}
-    </select>
+  historySetter,
+}: HeaderProps) => {
+  const handleNewSession = () => {
+    sessionSetter(generateSessionID());
+    historySetter([]);
+  };
 
+  return (
     <StyledDiv
+      height="7vh"
       display="flex"
-      width="100%"
+      flexDirection="row"
       alignItems="center"
-      justifyContent="center"
-      flexDirection="column"
+      justifyContent="space-between"
+      mb="4px"
+      position="sticky" // Make the header sticky
+      top="0" // Stick it to the top of the viewport
+      zIndex="999" // Ensure it's above other content
     >
-      <span
-        title="WebAssist is an innovative browser extension designed to enable users to converse with Large Language Models towards accomplishing real-world tasks within web browsers."
-        style={{ cursor: "help" }}
+      <select
+        value={model}
+        onChange={(e) => modelSetter(e.target.value)}
+        style={{
+          // Customize select element style
+          border: "none",
+          background: "transparent",
+          padding: "0.5rem",
+          fontWeight: "500",
+          color: "#a15dc4",
+          textAlign: "center",
+        }}
       >
-        <StyledText variant="title">Web Assist</StyledText>
-      </span>
-      <StyledText variant="welcomeText">Session {sessionID}</StyledText>
-    </StyledDiv>
+        {ModelNames.map((model) => (
+          <option key={model} value={model}>
+            {model}
+          </option>
+        ))}
+      </select>
 
-    <StyledDiv
-      onClick={() => sessionSetter(generateSessionID())}
-      style={{ marginLeft: "auto", whiteSpace: "nowrap" }}
-    >
-      <StyledText variant="subtitle">New Session</StyledText>
+      <StyledDiv
+        display="flex"
+        width="100%"
+        alignItems="center"
+        justifyContent="center"
+        flexDirection="column"
+      >
+        <span
+          title="WebAssist is an innovative browser extension designed to enable users to converse with Large Language Models towards accomplishing real-world tasks within web browsers."
+          style={{ cursor: "help" }}
+        >
+          <StyledText variant="title">Web Assist</StyledText>
+        </span>
+        <StyledText variant="welcomeText">Session {sessionID}</StyledText>
+      </StyledDiv>
+
+      <StyledDiv
+        onClick={handleNewSession}
+        style={{ marginLeft: "auto", whiteSpace: "nowrap" }}
+      >
+        <StyledText variant="subtitle">New Session</StyledText>
+      </StyledDiv>
     </StyledDiv>
-  </StyledDiv>
-);
+  );
+};
