@@ -42,6 +42,8 @@ export const ContinueButton = ({
   const handleClick = async () => {
     setModelIsTyping(true);
 
+    // TODO: change postChat to also handleResponse and setPrevTurn
+    // TODO: move mousePosition within continueExecution
     await continueExecution(model, sessionID, uidKey, prevTurn, mousePosition);
 
     setModelIsTyping(false);

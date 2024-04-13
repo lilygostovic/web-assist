@@ -54,6 +54,8 @@ export const InputField = ({
     setModelIsTyping(true);
 
     // try to get response from backend
+    // TODO: change postChat to also handleResponse and setPrevTurn
+    // TODO: move mousePosition within postChat
     try {
       const res = await postChat(
         model,
@@ -86,8 +88,6 @@ export const InputField = ({
       width="95%"
       mb="15px"
     >
-      {/* TODO: change button to be invisible if no history, disabled when model is typing */}
-
       {history.length === 0 ? (
         <></>
       ) : (
