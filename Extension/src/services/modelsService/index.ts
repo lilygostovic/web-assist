@@ -3,6 +3,7 @@ import {
   ChatMessage,
   LoadPrevTurn,
   PrevTurn,
+  PrevTurnWithElement,
   ResponseBody,
   ScrollPrevTurn,
 } from "../../types";
@@ -61,6 +62,7 @@ const requestNextAction = async (
 
 export const performAction = async (
   res: ResponseBody,
+  uidKey: string,
   setHistory: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
   setPrevTurn: React.Dispatch<React.SetStateAction<null | PrevTurn>>
 ): Promise<void> => {
@@ -102,19 +104,53 @@ export const performAction = async (
         scrollX: args.scrollX,
         scrollY: args.scrollY,
       } as ScrollPrevTurn;
+      chrome.tabs.sendMessage(tabId, message);
+      setPrevTurn(message);
       break;
     case "load":
       message = {
         intent: intent,
         url: args.url,
       } as LoadPrevTurn;
+      chrome.tabs.sendMessage(tabId, message);
+      setPrevTurn(message);
       break;
-    default:
-      InfoToast({ message: "PrevTurnWithElement" });
+    case "click":
+    case "submit":
+      chrome.tabs.sendMessage(tabId, {
+        intent: intent,
+        uidKey: uidKey,
+        uid: args.uid,
+      });
+      setPrevTurn({
+        intent: intent,
+        element: args.element,
+      });
+      break;
+    case "change":
+      chrome.tabs.sendMessage(tabId, {
+        intent: intent,
+        uidKey: uidKey,
+        uid: args.uid,
+      });
+      setPrevTurn({
+        intent: intent,
+        element: args.element,
+      });
+      break;
+    case "textinput":
+      chrome.tabs.sendMessage(tabId, {
+        intent: intent,
+        uidKey: uidKey,
+        uid: args.uid,
+        text: args.text,
+      });
+      setPrevTurn({
+        intent: intent,
+        element: args.element,
+      });
+      break;
   }
-
-  chrome.tabs.sendMessage(tabId, message);
-  setPrevTurn(message);
 };
 
 export const continueExecution = async (

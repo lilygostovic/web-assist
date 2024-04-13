@@ -110,7 +110,7 @@ const loadURL = async (url) => {
   await waitForDocumentReady();
   window.location.href = url;
   await waitForDocumentReady();
-  return window.location.href === getURL();
+  return window.location.href === url;
 };
 
 const _scroll = async (x, y) => {

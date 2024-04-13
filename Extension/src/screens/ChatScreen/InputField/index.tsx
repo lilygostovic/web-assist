@@ -54,7 +54,7 @@ export const InputField = ({
     // TODO: change postChat to also handleResponse and setPrevTurn
     try {
       const res = await postChat(model, sessionID, uidKey, text, prevTurn);
-      performAction(res, setHistory, setPrevTurn);
+      performAction(res, uidKey, setHistory, setPrevTurn);
     } catch (err) {
       ErrorToast({ message: `Error: ${err}` });
     }
