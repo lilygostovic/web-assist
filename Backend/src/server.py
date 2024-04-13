@@ -94,8 +94,9 @@ async def get_next_action(request_body: RequestBody):
 
             # Create new replay object if not there
             if session_key not in stored_replays:
-                stored_replays["replay"] = InferReplay(session_id="Testing123")
-            replay = stored_replays["replay"]
+                stored_replays[session_key] = InferReplay(session_id=session_key)
+            replay = stored_replays[session_key]
+            logger.info(f"Current replay {replay.session_id} has {len(replay)} turns.")
 
             # Add prev turn if exist
             if request_body.prev_turn:
