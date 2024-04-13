@@ -1,4 +1,4 @@
-import { getBrowserInfo } from "../chromeExtensionsService";
+import { getBrowserInfo, getMousePosition } from "../chromeExtensionsService";
 import { MousePosition, PrevTurn, ResponseBody } from "../../types";
 import { InfoToast } from "../../components/CustomToast";
 
@@ -7,14 +7,15 @@ const requestNextAction = async (
   sessionID: string,
   uidKey: string,
   userIntent: { [key: string]: string },
-  prevTurn: PrevTurn | null,
-  mousePosition: MousePosition
+  prevTurn: PrevTurn | null
 ): Promise<ResponseBody> => {
   const base_url = "http://localhost:8080";
   const API_path = "/v1/get_next_action";
 
   const { tabId, url, viewportHeight, viewportWidth, zoomLevel, html, bboxes } =
     await getBrowserInfo(uidKey);
+
+  const { mousePosition } = getMousePosition();
 
   const metadata = {
     mouseX: mousePosition.x,
@@ -55,20 +56,12 @@ export const continueExecution = async (
   model: string,
   sessionID: string,
   uidKey: string,
-  prevTurn: PrevTurn | null,
-  mousePosition: MousePosition
+  prevTurn: PrevTurn | null
 ): Promise<ResponseBody> => {
   const userIntent = {
     intent: "continue",
   };
-  return requestNextAction(
-    model,
-    sessionID,
-    uidKey,
-    userIntent,
-    prevTurn,
-    mousePosition
-  );
+  return requestNextAction(model, sessionID, uidKey, userIntent, prevTurn);
 };
 
 export const postChat = async (
@@ -76,20 +69,12 @@ export const postChat = async (
   sessionID: string,
   uidKey: string,
   newMessage: string,
-  prevTurn: PrevTurn | null,
-  mousePosition: MousePosition
+  prevTurn: PrevTurn | null
 ): Promise<ResponseBody> => {
   const userIntent = {
     intent: "say",
     utterance: newMessage,
   };
 
-  return requestNextAction(
-    model,
-    sessionID,
-    uidKey,
-    userIntent,
-    prevTurn,
-    mousePosition
-  );
+  return requestNextAction(model, sessionID, uidKey, userIntent, prevTurn);
 };

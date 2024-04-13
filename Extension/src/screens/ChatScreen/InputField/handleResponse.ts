@@ -12,6 +12,7 @@ export const handleResponse = ({ res, setHistory }: HandleResponseProps) => {
       ...prevHistory,
     ]);
   } else if (res.intent === "scroll") {
+    ``;
     // handle scroll actions
   } else {
     // handle all other actions

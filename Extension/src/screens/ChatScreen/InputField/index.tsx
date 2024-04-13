@@ -5,7 +5,6 @@ import { useModelsService } from "../../../services";
 import { ChatMessage, PrevTurn, ResponseBody } from "../../../types";
 import { ContinueButton } from "./ContinueButton";
 import { handleResponse } from "./handleResponse";
-import { useMousePosition } from "./useMousePosition";
 
 type InputFieldProps = {
   model: string;
@@ -30,7 +29,6 @@ export const InputField = ({
   const [prevTurn, setPrevTurn] = useState<null | PrevTurn>(null);
 
   const { postChat } = useModelsService();
-  const { mousePosition } = useMousePosition();
 
   const blockSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
@@ -57,14 +55,7 @@ export const InputField = ({
     // TODO: change postChat to also handleResponse and setPrevTurn
     // TODO: move mousePosition within postChat
     try {
-      const res = await postChat(
-        model,
-        sessionID,
-        uidKey,
-        text,
-        prevTurn,
-        mousePosition
-      );
+      const res = await postChat(model, sessionID, uidKey, text, prevTurn);
 
       // // perform action
       // handleResponse({ res, setHistory });
@@ -97,7 +88,6 @@ export const InputField = ({
           uidKey={uidKey}
           historyExists={history.length !== 0}
           prevTurn={prevTurn}
-          mousePosition={mousePosition}
           modelIsTyping={modelIsTyping}
           setModelIsTyping={setModelIsTyping}
         />

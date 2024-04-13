@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 
 import { StyledDiv, StyledText, ErrorToast } from "../../../components";
-import { MousePosition, PrevTurn } from "../../../types";
+import { PrevTurn } from "../../../types";
 import { useModelsService } from "../../../services";
 
 const StyledButtonDiv = styled.div`
@@ -18,7 +18,6 @@ type ContinueButtonProps = {
   uidKey: string;
   historyExists: boolean;
   prevTurn: PrevTurn | null;
-  mousePosition: MousePosition;
   modelIsTyping: boolean;
   setModelIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -29,7 +28,6 @@ export const ContinueButton = ({
   uidKey,
   historyExists,
   prevTurn,
-  mousePosition,
   modelIsTyping,
   setModelIsTyping,
 }: ContinueButtonProps) => {
@@ -44,7 +42,7 @@ export const ContinueButton = ({
 
     // TODO: change postChat to also handleResponse and setPrevTurn
     // TODO: move mousePosition within continueExecution
-    await continueExecution(model, sessionID, uidKey, prevTurn, mousePosition);
+    await continueExecution(model, sessionID, uidKey, prevTurn);
 
     setModelIsTyping(false);
   };
