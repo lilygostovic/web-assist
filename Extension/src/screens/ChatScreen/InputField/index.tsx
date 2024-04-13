@@ -2,9 +2,8 @@ import { useState } from "react";
 
 import { StyledDiv, ErrorToast, InfoToast } from "../../../components";
 import { useModelsService } from "../../../services";
-import { ChatMessage, PrevTurn, ResponseBody } from "../../../types";
+import { ChatMessage, PrevTurn } from "../../../types";
 import { ContinueButton } from "./ContinueButton";
-import { handleResponse } from "./handleResponse";
 
 type InputFieldProps = {
   model: string;
@@ -28,7 +27,7 @@ export const InputField = ({
   const [text, setText] = useState("");
   const [prevTurn, setPrevTurn] = useState<null | PrevTurn>(null);
 
-  const { postChat } = useModelsService();
+  const { postChat, performAction } = useModelsService();
 
   const blockSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
@@ -53,15 +52,9 @@ export const InputField = ({
 
     // try to get response from backend
     // TODO: change postChat to also handleResponse and setPrevTurn
-    // TODO: move mousePosition within postChat
     try {
       const res = await postChat(model, sessionID, uidKey, text, prevTurn);
-
-      // // perform action
-      // handleResponse({ res, setHistory });
-
-      // // update prev_turn
-      // setPrevTurn(res);
+      performAction(res, setHistory, setPrevTurn);
     } catch (err) {
       ErrorToast({ message: `Error: ${err}` });
     }
@@ -90,6 +83,8 @@ export const InputField = ({
           prevTurn={prevTurn}
           modelIsTyping={modelIsTyping}
           setModelIsTyping={setModelIsTyping}
+          setHistory={setHistory}
+          setPrevTurn={setPrevTurn}
         />
       )}
 

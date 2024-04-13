@@ -169,32 +169,32 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     done_async_action = true;
   }
 
-  if (message.action === "change") {
+  if (message.intent === "change") {
     sendResponse(_change(message.uidKey, message.uid, message.value));
     done_async_action = true;
   }
 
-  if (message.action === "click") {
+  if (message.intent === "click") {
     sendResponse(_click(message.uidKey, message.uid));
     done_async_action = true;
   }
 
-  if (message.action === "load") {
-    sendResponse(loadURL(message.uid));
+  if (message.intent === "load") {
+    sendResponse(loadURL(message.url));
     done_async_action = true;
   }
 
-  if (message.action === "scroll") {
+  if (message.intent === "scroll") {
     sendResponse(_scroll(message.scrollX, message.scrollY));
     done_async_action = true;
   }
 
-  if (message.action === "submit") {
+  if (message.intent === "submit") {
     sendResponse(_submit(message.uidKey, message.uid));
     done_async_action = true;
   }
 
-  if (message.action === "textinput") {
+  if (message.intent === "textinput") {
     sendResponse(_change(message.uidKey, message.uid, message.text));
     done_async_action = true;
   }

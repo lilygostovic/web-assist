@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 
 import { StyledDiv, StyledText, ErrorToast } from "../../../components";
-import { PrevTurn } from "../../../types";
+import { ChatMessage, PrevTurn } from "../../../types";
 import { useModelsService } from "../../../services";
 
 const StyledButtonDiv = styled.div`
@@ -20,6 +20,8 @@ type ContinueButtonProps = {
   prevTurn: PrevTurn | null;
   modelIsTyping: boolean;
   setModelIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
+  setHistory: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
+  setPrevTurn: React.Dispatch<React.SetStateAction<null | PrevTurn>>;
 };
 
 export const ContinueButton = ({
@@ -30,8 +32,10 @@ export const ContinueButton = ({
   prevTurn,
   modelIsTyping,
   setModelIsTyping,
+  setHistory,
+  setPrevTurn,
 }: ContinueButtonProps) => {
-  const { continueExecution } = useModelsService();
+  const { continueExecution, performAction } = useModelsService();
 
   const blockContinue = () => {
     ErrorToast({ message: "Model is loading..." });
@@ -41,8 +45,12 @@ export const ContinueButton = ({
     setModelIsTyping(true);
 
     // TODO: change postChat to also handleResponse and setPrevTurn
-    // TODO: move mousePosition within continueExecution
-    await continueExecution(model, sessionID, uidKey, prevTurn);
+    try {
+      const res = await continueExecution(model, sessionID, uidKey, prevTurn);
+      performAction(res, setHistory, setPrevTurn);
+    } catch (err) {
+      ErrorToast({ message: `Error: ${err}` });
+    }
 
     setModelIsTyping(false);
   };

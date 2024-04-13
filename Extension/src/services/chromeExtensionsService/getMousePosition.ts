@@ -1,23 +1,12 @@
-import { useEffect, useState } from "react";
 import { MousePosition } from "../../types";
 
-export const getMousePosition = (): { mousePosition: MousePosition } => {
-  const [mousePosition, setMousePosition] = useState<MousePosition>({
+// TODO: check if we actually use mouse position
+// TODO: Currently, doesn't make sense as the mouse is usually interacting with the extension...
+export const getMousePosition = (): MousePosition => {
+  let result = {
     x: 0,
     y: 0,
-  });
+  } as MousePosition;
 
-  useEffect(() => {
-    const updateMousePosition = (ev: MouseEvent) => {
-      setMousePosition({ x: ev.clientX, y: ev.clientY });
-    };
-
-    window.addEventListener("mousemove", updateMousePosition);
-
-    return () => {
-      window.removeEventListener("mousemove", updateMousePosition);
-    };
-  }, []);
-
-  return { mousePosition };
+  return result;
 };

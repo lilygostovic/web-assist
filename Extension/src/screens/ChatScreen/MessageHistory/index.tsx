@@ -42,7 +42,7 @@ export const MessageHistory = ({
         <ChatBubble
           key={index}
           content={chatMessage.content}
-          isModel={chatMessage.speaker === "model"}
+          speaker={chatMessage.speaker}
         />
       ))}
     </StyledDiv>

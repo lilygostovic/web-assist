@@ -1,8 +1,8 @@
 import { getBrowserInfo } from "./chromeExtensionsService";
-import { continueExecution, postChat } from "./modelsService";
+import { continueExecution, performAction, postChat } from "./modelsService";
 
 export const useModelsService = () => {
-  return { continueExecution, postChat };
+  return { performAction, continueExecution, postChat };
 };
 
 export const useChromeExtensionService = () => {

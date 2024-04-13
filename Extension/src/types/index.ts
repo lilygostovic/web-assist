@@ -1,6 +1,6 @@
 export type ChatMessage = {
   content: string;
-  speaker: "user" | "model";
+  speaker: "user" | "model" | "action";
 };
 export const ModelNames: string[] = ["Sheared LLaMa"];
 
@@ -60,16 +60,17 @@ export type ChatPrevTurn = {
   intent: "say";
   utterance: string;
 };
-type ScrollPrevTurn = {
+export type ScrollPrevTurn = {
   intent: "scroll";
   scrollX: number | undefined;
   scrollY: number | undefined;
 };
-type LoadPrevTurn = {
+export type LoadPrevTurn = {
   intent: "load";
+  url?: string;
   properties?: Properties;
 };
-type PrevTurnWithElement = {
+export type PrevTurnWithElement = {
   intent: "change" | "click" | "submit" | "textinput";
   element: Element;
 };

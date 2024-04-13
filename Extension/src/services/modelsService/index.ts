@@ -1,6 +1,12 @@
 import { getBrowserInfo, getMousePosition } from "../chromeExtensionsService";
-import { MousePosition, PrevTurn, ResponseBody } from "../../types";
-import { InfoToast } from "../../components/CustomToast";
+import {
+  ChatMessage,
+  LoadPrevTurn,
+  PrevTurn,
+  ResponseBody,
+  ScrollPrevTurn,
+} from "../../types";
+import { ErrorToast, InfoToast } from "../../components/CustomToast";
 
 const requestNextAction = async (
   model: string,
@@ -15,7 +21,7 @@ const requestNextAction = async (
   const { tabId, url, viewportHeight, viewportWidth, zoomLevel, html, bboxes } =
     await getBrowserInfo(uidKey);
 
-  const { mousePosition } = getMousePosition();
+  const mousePosition = getMousePosition();
 
   const metadata = {
     mouseX: mousePosition.x,
@@ -49,7 +55,66 @@ const requestNextAction = async (
   InfoToast({
     message: `Response: ${res.status} - ${JSON.stringify(json)}`,
   });
+
   return json;
+};
+
+export const performAction = async (
+  res: ResponseBody,
+  setHistory: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
+  setPrevTurn: React.Dispatch<React.SetStateAction<null | PrevTurn>>
+): Promise<void> => {
+  const { intent, args, element } = res;
+
+  // Update our history appropriately
+  const newMessage = {
+    speaker: intent === "say" ? "model" : "action",
+    content:
+      intent === "say"
+        ? args.utterance
+        : `Attempting to ${intent} with args: ${JSON.stringify(args)}`,
+  } as ChatMessage;
+  setHistory((prevHistory) => [newMessage, ...prevHistory]);
+
+  // Perform action and update Prev Turn
+  if (intent === "say") {
+    setPrevTurn({
+      intent: intent,
+      utterance: args.utterance,
+    });
+    return;
+  }
+
+  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (tabs.length === 0) {
+    ErrorToast({ message: "No active tab was found!" });
+  }
+
+  const activeTab = tabs[0];
+  const tabId = activeTab.id as number;
+
+  let message = { intent: intent } as PrevTurn;
+
+  switch (intent) {
+    case "scroll":
+      message = {
+        intent: intent,
+        scrollX: args.scrollX,
+        scrollY: args.scrollY,
+      } as ScrollPrevTurn;
+      break;
+    case "load":
+      message = {
+        intent: intent,
+        url: args.url,
+      } as LoadPrevTurn;
+      break;
+    default:
+      InfoToast({ message: "PrevTurnWithElement" });
+  }
+
+  chrome.tabs.sendMessage(tabId, message);
+  setPrevTurn(message);
 };
 
 export const continueExecution = async (
@@ -61,6 +126,7 @@ export const continueExecution = async (
   const userIntent = {
     intent: "continue",
   };
+
   return requestNextAction(model, sessionID, uidKey, userIntent, prevTurn);
 };
 
