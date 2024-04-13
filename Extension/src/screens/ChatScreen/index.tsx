@@ -34,12 +34,12 @@ export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
         display="flex"
         flexDirection="column"
       >
+        // TODO: MessageHistory will need to keep track of model actions.
         {history.length === 0 ? (
           <EmptyMessage />
         ) : (
           <MessageHistory history={history} modelIsTyping={modelIsTyping} />
         )}
-
         <InputField
           model={model}
           sessionID={sessionID}
