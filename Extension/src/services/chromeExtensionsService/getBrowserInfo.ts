@@ -1,5 +1,4 @@
 import { ErrorToast, InfoToast } from "../../components/CustomToast";
-import { injectScript } from "./injectScript";
 
 interface Bboxes<> {
   [key: string]: {
@@ -23,40 +22,6 @@ interface BrowserInfo {
   html: string;
   bboxes: Bboxes;
 }
-
-const generateUID = (): string => {
-  const min = 10000000; // Smallest 8-digit number
-  const max = 99999999; // Largest 8-digit number
-
-  return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
-};
-
-// TODO: Check if the document is referring to the react document / html page of the tab.
-const tagElementsAndRetrieveBBox = (uidKey: string): Bboxes => {
-  // get all elements
-  const elements = document.querySelectorAll("*");
-  let boundingBoxes: Bboxes = {};
-
-  // Loop through each element and add attribute
-  elements.forEach((element) => {
-    const uid = generateUID();
-    const bbox = element.getBoundingClientRect();
-
-    element.setAttribute(uidKey, uid);
-    boundingBoxes[`${uid}`] = {
-      bottom: bbox.bottom,
-      height: bbox.height,
-      left: bbox.left,
-      right: bbox.right,
-      top: bbox.top,
-      width: bbox.width,
-      x: bbox.x,
-      y: bbox.y,
-    };
-  });
-
-  return boundingBoxes;
-};
 
 export const getBrowserInfo = async (uidKey: string): Promise<BrowserInfo> => {
   // Defaults
