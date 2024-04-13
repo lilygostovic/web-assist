@@ -7,6 +7,8 @@ type ChatBubbleProps = {
   isLoading?: boolean;
 };
 
+// TODO: action text should wrap even if no whitespace.
+// TODO: chat text may have \n\t
 export const ChatBubble = ({
   content,
   speaker,

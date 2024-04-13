@@ -9,6 +9,8 @@ import {
 } from "../../types";
 import { ErrorToast, InfoToast } from "../../components/CustomToast";
 
+// TODO: some error with bboxes after loading url
+// TODO: throw error of HTTP status isn't 200
 const requestNextAction = async (
   model: string,
   sessionID: string,
