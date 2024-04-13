@@ -1,9 +1,11 @@
+import "./toast.css";
+
 import { useState } from "react";
-import { StyledDiv } from "./components";
-import { ChatScreen } from "./screens";
 
 import { ToastContainer } from "react-toastify";
-import "./toast.css";
+
+import { StyledDiv } from "./components";
+import { ChatScreen } from "./screens";
 
 function App() {
   const [chosenModel, setChosenModel] = useState<string>("Sheared LLaMa");

@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { StyledDiv } from '../../components';
-import { ChatMessage } from '../../types';
-import { EmptyMessage } from './EmptyMessage';
-import { Header } from './Header';
-import { InputField } from './InputField';
-import { generateSessionID } from './InputField/helper';
-import { MessageHistory } from './MessageHistory';
+import { StyledDiv } from "../../components";
+import { ChatMessage } from "../../types";
+import { EmptyMessage } from "./EmptyMessage";
+import { Header } from "./Header";
+import { InputField } from "./InputField";
+import { generateSessionID } from "./InputField/helper";
+import { MessageHistory } from "./MessageHistory";
 
 type ChatScreenProps = {
   model: string;
@@ -20,7 +20,7 @@ export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
   const uidKey = "web-assist-id";
 
   return (
-    <StyledDiv height="95%" width="100%">
+    <StyledDiv height="95%" width="95%">
       <Header
         model={model}
         modelSetter={modelSetter}
