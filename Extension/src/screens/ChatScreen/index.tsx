@@ -1,12 +1,12 @@
-import { useRef, useState } from "react";
+import { useState } from 'react';
 
-import { StyledDiv, StyledText } from "../../components";
-import { ChatMessage } from "../../types";
-import { Header } from "./Header";
-import { EmptyMessage } from "./EmptyMessage";
-import { InputField } from "./InputField";
-import { MessageHistory } from "./MessageHistory";
-import { generateSessionID } from "./InputField/helper";
+import { StyledDiv } from '../../components';
+import { ChatMessage } from '../../types';
+import { EmptyMessage } from './EmptyMessage';
+import { Header } from './Header';
+import { InputField } from './InputField';
+import { generateSessionID } from './InputField/helper';
+import { MessageHistory } from './MessageHistory';
 
 type ChatScreenProps = {
   model: string;
@@ -34,7 +34,7 @@ export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
         display="flex"
         flexDirection="column"
       >
-        // TODO: MessageHistory will need to keep track of model actions.
+        {/* TODO: MessageHistory will need to keep track of model actions. */}
         {history.length === 0 ? (
           <EmptyMessage />
         ) : (

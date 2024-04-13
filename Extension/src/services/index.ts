@@ -1,4 +1,4 @@
-import { getBrowserInfo, injectScript } from "./chromeExtensionsService";
+import { getBrowserInfo } from "./chromeExtensionsService";
 import { continueExecution, postChat } from "./modelsService";
 
 export const useModelsService = () => {
@@ -6,5 +6,5 @@ export const useModelsService = () => {
 };
 
 export const useChromeExtensionService = () => {
-  return { getBrowserInfo, injectScript };
+  return { getBrowserInfo };
 };
