@@ -63,6 +63,11 @@ export const StyledText = styled.text<StyledTextProps>`
           color: #c3c3c3;
           font-weight: 500;
         `;
+      case "chatBubble":
+        return css`
+          white-space: pre-wrap;
+          word-wrap: break-word;
+        `;
     }
   }}
 

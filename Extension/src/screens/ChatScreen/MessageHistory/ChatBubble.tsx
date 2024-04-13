@@ -7,7 +7,6 @@ type ChatBubbleProps = {
   isLoading?: boolean;
 };
 
-// TODO: action text should wrap even if no whitespace.
 // TODO: chat text may have \n\t
 export const ChatBubble = ({
   content,
@@ -51,6 +50,7 @@ export const ChatBubble = ({
         borderRadius={16}
         my="2px"
         p="8px"
+        maxWidth="100%"
       >
         {isLoading ? (
           <LoadingView />
