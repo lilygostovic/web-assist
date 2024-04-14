@@ -532,24 +532,18 @@ def get_element_info(
     if not uid:
         return None
 
-    xpaths_dict = turn.get_xpaths_dict(uid_key=uid_key)
+    elem_xpath = turn.get_element_xpath(uid, uid_key)
+    logging.debug(elem_xpath)
 
-    if len(xpaths_dict) == 0:
-        return None
-
-    if uid not in xpaths_dict:
-        logging.debug(f"UID {uid} not found in xpaths dict")
-        return None
-
-    if turn.bboxes is None or uid not in turn.bboxes:
-        return None
+    elem_bbox = turn.get_element_bbox(uid)
+    logging.debug(elem_bbox)
 
     element_info = {
         "attributes": {
             uid_key: uid,
         },
-        "bbox": turn.bboxes[uid],
-        "xpath": xpaths_dict[uid],
+        "bbox": elem_bbox,
+        "xpath": elem_xpath,
     }
 
     return element_info

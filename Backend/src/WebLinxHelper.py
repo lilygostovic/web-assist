@@ -66,7 +66,7 @@ class InferTurn(wl.Turn):
         return vars(self).items()
 
     # Done for compatibility purposes
-    @cached_property
+    @property
     def args(self) -> dict:
 
         if self.intent == BrowserIntentEnum.say:
@@ -133,13 +133,13 @@ class InferTurn(wl.Turn):
         if isinstance(self.prev_turn, UserIntent):
             return None
         else:
-            return self.prev_turn.properties
+            return {}
 
-    @cached_property
+    @property
     def bboxes(self) -> dict:
         return self._bboxes
 
-    @cached_property
+    @property
     def html(self) -> str:
         return self._html
 
@@ -193,10 +193,12 @@ class InferTurn(wl.Turn):
         if not self.html:
             return {}
 
-        tree = lxml.html.fromstring(self.html)
+        tree = lxml.html.fromstring(self._html)
         root = tree.getroottree()
 
         elems = root.xpath(f"//*[@{uid_key}]")
+
+        logging.debug(f"xpath:  //*[@{uid_key}]")
 
         if len(elems) == 0:
             return {}
@@ -208,7 +210,40 @@ class InferTurn(wl.Turn):
             xpath = root.getpath(elem)
             xpaths[uid] = xpath
 
+        logging.debug(f"xpaths ({len(xpaths)}): {list(xpaths.keys())[:10]}")
+        logging.debug(f"bboxes elements: {len(self._bboxes)}")
+
         return xpaths
+
+    def get_element_xpath(
+        self,
+        uid: str,
+        uid_key="data-webtasks-id",
+    ):
+        if not self.html:
+            return ""
+
+        tree = lxml.html.fromstring(self._html)
+        root = tree.getroottree()
+
+        elems = root.xpath(f'//*[@{uid_key}="{uid}"]')
+
+        if len(elems) == 0:
+            return ""
+
+        return root.getpath(elems[0])
+
+    def get_element_bbox(self, uid: str):
+
+        logging.debug(f"Bboxes ({len(self._bboxes)}: {list(self._bboxes.keys())[:10]}")
+
+        if uid in self._bboxes:
+            return self._bboxes[uid]
+        else:
+            logging.debug(f"Could not find UID {uid} in bboxes.")
+            return BoundingBox(
+                bottom=0, height=0, left=0, right=0, top=0, width=0, x=0, y=0
+            )
 
 
 class InferReplay(wl.Replay):
@@ -320,5 +355,14 @@ class InferReplay(wl.Replay):
 
         logging.info(
             f"Removing turn `[{prev_turn.speaker}] - {prev_turn.intent}` from Replay at index {prev_turn.index} "
+        )
+        return prev_turn
+
+    def get_lastInferTurn(self):
+        """Gets the last infer turn"""
+        prev_turn = self.turns[-1]
+
+        logging.info(
+            f"Retrieving turn `[{prev_turn.speaker}] - {prev_turn.intent}` from Replay at index {prev_turn.index} "
         )
         return prev_turn

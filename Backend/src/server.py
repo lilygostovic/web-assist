@@ -125,7 +125,12 @@ async def get_next_action(request_body: RequestBody):
                     metadata=request_body.metadata,
                 )
             else:
+                # update the turn's info
                 curr_turn = replay.remove_lastInferTurn()
+                curr_turn._html = request_body.html
+                curr_turn._bboxes = request_body.bboxes
+                curr_turn._metadata = request_body.metadata
+                replay.addInferTurn(curr_turn)
 
             # We query DRM model if there is turn.HTML and turn.bboxes exist
             uid_key = request_body.uid_key
@@ -141,6 +146,10 @@ async def get_next_action(request_body: RequestBody):
                     query=dmr_query, records=dmr_records
                 )
 
+                logger.info(
+                    f"Ran DMR and ranked a total of {len(cands_turn)} candidates."
+                )
+
             # Build prompt & predict action
             action_prompt = action_agent.build_prompt(
                 replay=replay,
@@ -153,16 +162,17 @@ async def get_next_action(request_body: RequestBody):
             )
 
             # Double check our response body
-            if (next_action["intent"] in BrowserIntentsWithElements) and (
-                not next_action["element"]
-            ):
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Bad action - Element not provided when needed",
-                )
+            # if (next_action["intent"] in BrowserIntentsWithElements) and (
+            #     not next_action["element"]
+            # ):
+            #     raise HTTPException(
+            #         status_code=400,
+            #         detail=f"Bad action - Element not provided when needed...\n{next_action}",
+            #     )
 
             # We add the turn
-            replay.addInferTurn(curr_turn)
+            if user_intent.intent == UserIntentEnum.say:
+                replay.addInferTurn(curr_turn)
 
             logger.info(f"Predicted: {next_action}")
 
