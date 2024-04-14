@@ -47,7 +47,7 @@ export const ContinueButton = ({
     // TODO: change postChat to also handleResponse and setPrevTurn
     try {
       const res = await continueExecution(model, sessionID, uidKey, prevTurn);
-      performAction(res, uidKey, setHistory, setPrevTurn);
+      await performAction(res, uidKey, setHistory, setPrevTurn);
     } catch (err) {
       ErrorToast({ message: `${err}` });
     }
