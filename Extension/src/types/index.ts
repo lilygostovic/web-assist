@@ -18,7 +18,7 @@ export type MousePosition = {
   y: number;
 };
 
-type Element = {
+export type Element_ = {
   attributes: object; // TODO:: can we add better typing?
   bbox: {
     bottom: number;
@@ -72,7 +72,7 @@ export type LoadPrevTurn = {
 };
 export type PrevTurnWithElement = {
   intent: "change" | "click" | "submit" | "textinput";
-  element: Element;
+  element: Element_;
 };
 export type PrevTurn =
   | ChatPrevTurn

@@ -6,11 +6,10 @@ import {
   PrevTurnWithElement,
   ResponseBody,
   ScrollPrevTurn,
+  Element_,
 } from "../../types";
 import { ErrorToast, InfoToast } from "../../components/CustomToast";
 
-// TODO: some error with bboxes after loading url
-// TODO: throw error of HTTP status isn't 200
 const requestNextAction = async (
   model: string,
   sessionID: string,
@@ -104,6 +103,7 @@ export const performAction = async (
   const tabId = activeTab.id as number;
 
   let message = { intent: intent } as PrevTurn;
+  let element_: Element_ | boolean;
 
   switch (intent) {
     case "scroll":
@@ -124,48 +124,65 @@ export const performAction = async (
       setPrevTurn(message);
       break;
     case "click":
-      await chrome.tabs.sendMessage(tabId, {
+      element_ = await chrome.tabs.sendMessage(tabId, {
         intent: intent,
         uidKey: uidKey,
         uid: args.uid,
       });
+      if (typeof element_ === "boolean") {
+        throw new Error("Could not perform action");
+      }
+      element_.xpath = element.xpath;
       setPrevTurn({
         intent: intent,
-        element: element,
+        element: element_,
       });
+
       break;
     case "submit":
-      await chrome.tabs.sendMessage(tabId, {
+      element_ = await chrome.tabs.sendMessage(tabId, {
         intent: intent,
         uidKey: uidKey,
         uid: args.uid,
       });
+      if (typeof element_ === "boolean") {
+        throw new Error("Could not perform action");
+      }
+      element_.xpath = element.xpath;
       setPrevTurn({
         intent: intent,
-        element: element,
+        element: element_,
       });
       break;
     case "change":
-      await chrome.tabs.sendMessage(tabId, {
+      element_ = await chrome.tabs.sendMessage(tabId, {
         intent: intent,
         uidKey: uidKey,
         uid: args.uid,
       });
+      if (typeof element_ === "boolean") {
+        throw new Error("Could not perform action");
+      }
+      element_.xpath = element.xpath;
       setPrevTurn({
         intent: intent,
-        element: element,
+        element: element_,
       });
       break;
     case "textinput":
-      await chrome.tabs.sendMessage(tabId, {
+      element_ = await chrome.tabs.sendMessage(tabId, {
         intent: intent,
         uidKey: uidKey,
         uid: args.uid,
         text: args.text,
       });
+      if (typeof element_ === "boolean") {
+        throw new Error("Could not perform action");
+      }
+      element_.xpath = element.xpath;
       setPrevTurn({
         intent: intent,
-        element: element,
+        element: element_,
       });
       break;
   }

@@ -63,6 +63,40 @@ const getElementByUID = (uidKey, uid) => {
   return element;
 };
 
+const getElementInfo = (element) => {
+  const attributes = {};
+  for (const attr of element.attributes) {
+    attributes[attr.name] = attr.value;
+  }
+
+  // Get bounding box information
+  const bbox = element.getBoundingClientRect();
+
+  // Get tag name
+  const tagName = element.tagName;
+
+  // Get text content
+  const textContent = element.textContent.trim();
+
+  // Create and return Element object
+  return {
+    attributes: attributes,
+    bbox: {
+      bottom: bbox.bottom,
+      height: bbox.height,
+      left: bbox.left,
+      right: bbox.right,
+      top: bbox.top,
+      width: bbox.width,
+      x: bbox.x,
+      y: bbox.y,
+    },
+    tagName: tagName,
+    xpath: "",
+    textContent: textContent,
+  };
+};
+
 // Browser Helper Functions
 const waitForDocumentReady = () => {
   return new Promise((resolve) => {
@@ -124,6 +158,7 @@ const _click = (uidKey, uid) => {
   element_clickable = ensureElement(element);
   if (element_clickable) {
     element.click();
+    return getElementInfo(element);
   }
 
   return element_clickable;
@@ -136,6 +171,7 @@ const _submit = (uidKey, uid) => {
 
   if (element_submittable) {
     element.submit();
+    return getElementInfo(element);
   }
   return element_submittable;
 };
@@ -147,6 +183,7 @@ const _change = (uidKey, uid, value) => {
 
   if (element_changeable) {
     element.value = value;
+    return getElementInfo(element);
   }
   return element_changeable;
 };
@@ -163,7 +200,6 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     sendResponse(retrieveHTML());
   }
 
-  // TODO: for browser actions with elements, return proper info if found or error.
   if (message.intent === "change") {
     sendResponse(_change(message.uidKey, message.uid, message.value));
   }
