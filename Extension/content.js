@@ -55,7 +55,7 @@ const ensureElement = (element) => {
 };
 
 const getElementByUID = (uidKey, uid) => {
-  return document.querySelector(`[${uidKey}="${uidValue}"]`);
+  return document.querySelector(`[${uidKey}="${uid}"]`);
 };
 
 // Browser Helper Functions

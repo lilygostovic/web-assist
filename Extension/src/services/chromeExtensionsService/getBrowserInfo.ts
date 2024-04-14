@@ -75,10 +75,6 @@ export const getBrowserInfo = async (uidKey: string): Promise<BrowserInfo> => {
 
     url = activeTab.url || url;
 
-    if (url === "") {
-      ErrorToast({ message: `URL found was: ${url}` });
-    }
-
     viewportHeight = activeTab.height || viewportHeight;
     viewportWidth = activeTab.width || viewportWidth;
 

@@ -124,6 +124,19 @@ export const performAction = async (
       setPrevTurn(message);
       break;
     case "click":
+      InfoToast({
+        message: `Clicking with args: ${JSON.stringify(args)}}`,
+      });
+      await chrome.tabs.sendMessage(tabId, {
+        intent: intent,
+        uidKey: uidKey,
+        uid: args.uid,
+      });
+      setPrevTurn({
+        intent: intent,
+        element: args.element,
+      });
+      break;
     case "submit":
       await chrome.tabs.sendMessage(tabId, {
         intent: intent,
