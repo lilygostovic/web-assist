@@ -54,10 +54,8 @@ def main(cfg):
     ########### Mocking the turns ################################################
     turn_5 = PrevTurn(
         intent="click",
-        html=wl.utils.html.open_html_with_encodings(
-            "./demonstrations/ckmtdoi/pages/page-2-0.html"
-        ),
-        bboxes=wl.utils.auto_read_json("./demonstrations/ckmtdoi/bboxes/bboxes-2.json"),
+        html=wl.utils.html.open_html_with_encodings("./ckmtdoi/pages/page-2-0.html"),
+        bboxes=wl.utils.auto_read_json("./ckmtdoi/bboxes/bboxes-2.json"),
         metadata={
             "mouseX": 0,
             "mouseY": 0,

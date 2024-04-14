@@ -44,7 +44,7 @@ def main(cfg):
     ### Mock object we get from the DMR ###
     cands_turn = []
     i = 0
-    with open("../wl_data/candidates/test_ckmtdoi.jsonl") as f:
+    with open("./ckmtdoi/test_ckmtdoi.jsonl") as f:
         for line in f:
             out = json.loads(line)
             if out["turn_index"] == 5:
@@ -54,9 +54,9 @@ def main(cfg):
                     break
 
     # Mock objects we need from the browser each turn
-    bboxes = wl.utils.auto_read_json("./demonstrations/ckmtdoi/bboxes/bboxes-2.json")
+    bboxes = wl.utils.auto_read_json("./ckmtdoi/bboxes/bboxes-2.json")
     page = wl.utils.html.open_html_with_encodings(
-        "./demonstrations/ckmtdoi/pages/page-2-0.html", raise_error=True
+        "./ckmtdoi/pages/page-2-0.html", raise_error=True
     )
     metadata = {
         "mouseX": 0,
