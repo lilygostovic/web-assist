@@ -231,6 +231,8 @@ class ActionAgent(BaseActionAgent):
             )
             pred_action = {"intent": intent, "args": args, "element": infered_element}
 
+        torch.cuda.empty_cache()
+
         return pred_action
 
 

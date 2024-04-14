@@ -163,6 +163,8 @@ class DMR(BaseDMR):
             for i, r in enumerate(records):
                 r["score"] = scores[i]
 
+        torch.cuda.empty_cache()
+
         # Add rank
         scores = {r["uid"]: r["score"] for r in records}
         ranks = get_ranks_from_scores(scores)
