@@ -127,9 +127,6 @@ async def get_next_action(request_body: RequestBody):
             else:
                 # update the turn's info
                 curr_turn = replay.remove_lastInferTurn()
-                curr_turn._html = request_body.html
-                curr_turn._bboxes = request_body.bboxes
-                curr_turn._metadata = request_body.metadata
                 replay.addInferTurn(curr_turn)
 
             # We query DRM model if there is turn.HTML and turn.bboxes exist
