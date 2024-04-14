@@ -11,8 +11,10 @@ type InputFieldProps = {
   uidKey: string;
   history: ChatMessage[];
   modelIsTyping: boolean;
+  prevTurn: PrevTurn | null;
   setHistory: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
   setModelIsTyping: React.Dispatch<React.SetStateAction<boolean>>;
+  setPrevTurn: React.Dispatch<React.SetStateAction<null | PrevTurn>>;
 };
 
 export const InputField = ({
@@ -21,11 +23,12 @@ export const InputField = ({
   uidKey,
   history,
   modelIsTyping,
+  prevTurn,
   setHistory,
   setModelIsTyping,
+  setPrevTurn,
 }: InputFieldProps) => {
   const [text, setText] = useState("");
-  const [prevTurn, setPrevTurn] = useState<null | PrevTurn>(null);
 
   const { postChat, performAction } = useModelsService();
 

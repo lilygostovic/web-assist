@@ -73,9 +73,7 @@ const waitForDocumentReady = () => {
 };
 
 // Actual Functions to call
-const tagElementsAndRetrieveBBox = async (uidKey) => {
-  await waitForDocumentReady();
-
+const tagElementsAndRetrieveBBox = (uidKey) => {
   // get all elements
   const elements = document.querySelectorAll("*");
   let boundingBoxes = {};
@@ -101,26 +99,21 @@ const tagElementsAndRetrieveBBox = async (uidKey) => {
   return boundingBoxes;
 };
 
-const retrieveHTML = async () => {
-  await waitForDocumentReady();
+const retrieveHTML = () => {
   return document.documentElement.outerHTML;
 };
 
-const loadURL = async (url) => {
-  await waitForDocumentReady();
+const loadURL = (url) => {
   window.location.href = url;
-  await waitForDocumentReady();
   return window.location.href === url;
 };
 
-const _scroll = async (x, y) => {
-  await waitForDocumentReady();
+const _scroll = (x, y) => {
   window.scrollTo(x, y);
   return window.scrollX === x && window.scrollY === y;
 };
 
-const _click = async (uidKey, uid) => {
-  await waitForDocumentReady();
+const _click = (uidKey, uid) => {
   let element = getElementByUID(uidKey, uid);
 
   element_clickable = ensureElement(element);
@@ -131,8 +124,7 @@ const _click = async (uidKey, uid) => {
   return element_clickable;
 };
 
-const _submit = async (uidKey, uid) => {
-  await waitForDocumentReady();
+const _submit = (uidKey, uid) => {
   let element = getElementByUID(uidKey, uid);
 
   element_submittable = ensureElement(element);
@@ -143,8 +135,7 @@ const _submit = async (uidKey, uid) => {
   return element_submittable;
 };
 
-const _change = async (uidKey, uid, value) => {
-  await waitForDocumentReady();
+const _change = (uidKey, uid, value) => {
   let element = getElementByUID(uidKey, uid);
 
   element_changeable = ensureElement(element);
@@ -155,49 +146,41 @@ const _change = async (uidKey, uid, value) => {
   return element_changeable;
 };
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  let done_async_action = false;
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+  await waitForDocumentReady();
 
   // Check if the message is to execute a script
   if (message.action === "tagElementsAndRetrieveBBox") {
     sendResponse(tagElementsAndRetrieveBBox(message.uid));
-    done_async_action = true;
   }
 
   if (message.action === "retrieveHTML") {
     sendResponse(retrieveHTML());
-    done_async_action = true;
   }
 
   if (message.intent === "change") {
     sendResponse(_change(message.uidKey, message.uid, message.value));
-    done_async_action = true;
   }
 
   if (message.intent === "click") {
     sendResponse(_click(message.uidKey, message.uid));
-    done_async_action = true;
   }
 
   if (message.intent === "load") {
     sendResponse(loadURL(message.url));
-    done_async_action = true;
   }
 
   if (message.intent === "scroll") {
     sendResponse(_scroll(message.scrollX, message.scrollY));
-    done_async_action = true;
   }
 
   if (message.intent === "submit") {
     sendResponse(_submit(message.uidKey, message.uid));
-    done_async_action = true;
   }
 
   if (message.intent === "textinput") {
     sendResponse(_change(message.uidKey, message.uid, message.text));
-    done_async_action = true;
   }
 
-  return done_async_action;
+  await waitForDocumentReady();
 });

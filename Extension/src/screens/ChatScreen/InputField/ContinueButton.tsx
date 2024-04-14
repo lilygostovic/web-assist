@@ -49,7 +49,7 @@ export const ContinueButton = ({
       const res = await continueExecution(model, sessionID, uidKey, prevTurn);
       performAction(res, uidKey, setHistory, setPrevTurn);
     } catch (err) {
-      ErrorToast({ message: `Error: ${err}` });
+      ErrorToast({ message: `${err}` });
     }
 
     setModelIsTyping(false);

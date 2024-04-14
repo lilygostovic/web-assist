@@ -55,9 +55,15 @@ const requestNextAction = async (
 
   const json = await res.json();
 
-  InfoToast({
-    message: `Response: ${res.status} - ${JSON.stringify(json)}`,
-  });
+  // Enable for debugging
+  // InfoToast({
+  //   message: `Response: ${res.status} - ${JSON.stringify(json)}`,
+  // });
+
+  // Check if the status code is not 200
+  if (res.status !== 200) {
+    throw new Error(`HTTP status code: ${res.status} ${JSON.stringify(json)}`);
+  }
 
   return json;
 };
@@ -106,7 +112,7 @@ export const performAction = async (
         scrollX: args.scrollX,
         scrollY: args.scrollY,
       } as ScrollPrevTurn;
-      chrome.tabs.sendMessage(tabId, message);
+      await chrome.tabs.sendMessage(tabId, message);
       setPrevTurn(message);
       break;
     case "load":
@@ -114,12 +120,12 @@ export const performAction = async (
         intent: intent,
         url: args.url,
       } as LoadPrevTurn;
-      chrome.tabs.sendMessage(tabId, message);
+      await chrome.tabs.sendMessage(tabId, message);
       setPrevTurn(message);
       break;
     case "click":
     case "submit":
-      chrome.tabs.sendMessage(tabId, {
+      await chrome.tabs.sendMessage(tabId, {
         intent: intent,
         uidKey: uidKey,
         uid: args.uid,
@@ -130,7 +136,7 @@ export const performAction = async (
       });
       break;
     case "change":
-      chrome.tabs.sendMessage(tabId, {
+      await chrome.tabs.sendMessage(tabId, {
         intent: intent,
         uidKey: uidKey,
         uid: args.uid,
@@ -141,7 +147,7 @@ export const performAction = async (
       });
       break;
     case "textinput":
-      chrome.tabs.sendMessage(tabId, {
+      await chrome.tabs.sendMessage(tabId, {
         intent: intent,
         uidKey: uidKey,
         uid: args.uid,

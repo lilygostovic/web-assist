@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { StyledDiv } from "../../components";
-import { ChatMessage } from "../../types";
+import { ChatMessage, PrevTurn } from "../../types";
 import { EmptyMessage } from "./EmptyMessage";
 import { Header } from "./Header";
 import { InputField } from "./InputField";
@@ -18,6 +18,7 @@ export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
   const [modelIsTyping, setModelIsTyping] = useState(false);
   const [sessionID, setSessionID] = useState(generateSessionID()); // Initialize sessionID once
   const uidKey = "web-assist-id";
+  const [prevTurn, setPrevTurn] = useState<null | PrevTurn>(null);
 
   return (
     <StyledDiv height="95%" width="95%">
@@ -27,6 +28,7 @@ export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
         sessionID={sessionID}
         sessionSetter={setSessionID}
         historySetter={setHistory}
+        prevTurnSetter={setPrevTurn}
       />
       <StyledDiv
         width="100%"
@@ -46,8 +48,10 @@ export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
           uidKey={uidKey}
           history={history}
           modelIsTyping={modelIsTyping}
+          prevTurn={prevTurn}
           setModelIsTyping={setModelIsTyping}
           setHistory={setHistory}
+          setPrevTurn={setPrevTurn}
         />
       </StyledDiv>
     </StyledDiv>

@@ -1,4 +1,4 @@
-import { ModelNames, ChatMessage } from "../../types";
+import { ModelNames, ChatMessage, PrevTurn } from "../../types";
 import { StyledDiv, StyledText } from "../../components";
 import { generateSessionID } from "./InputField/helper";
 
@@ -8,6 +8,7 @@ type HeaderProps = {
   sessionID: string;
   sessionSetter: React.Dispatch<React.SetStateAction<string>>;
   historySetter: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
+  prevTurnSetter: React.Dispatch<React.SetStateAction<null | PrevTurn>>;
 };
 
 export const Header = ({
@@ -16,10 +17,12 @@ export const Header = ({
   sessionID,
   sessionSetter,
   historySetter,
+  prevTurnSetter,
 }: HeaderProps) => {
   const handleNewSession = () => {
     sessionSetter(generateSessionID());
     historySetter([]);
+    prevTurnSetter(null);
   };
 
   return (

@@ -47,15 +47,14 @@ export const getBrowserInfo = async (uidKey: string): Promise<BrowserInfo> => {
     viewportWidth = activeTab.width || viewportWidth;
 
     // Edit current page with the tags + get bounding boxes
-    bboxes = chrome.tabs.sendMessage(tabId, {
+    bboxes = await chrome.tabs.sendMessage(tabId, {
       action: "tagElementsAndRetrieveBBox",
       uid: uidKey,
     });
 
-    // retrieve HTML after the edit
-    html = chrome.tabs
-      .sendMessage(tabId, { action: "retrieveHTML" })
-      .toString();
+    html = await chrome.tabs.sendMessage(tabId, {
+      action: "retrieveHTML",
+    });
   }
 
   return {
