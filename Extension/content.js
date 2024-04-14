@@ -46,11 +46,6 @@ const ensureElement = (element) => {
     return false;
   }
 
-  // Element is not interactive
-  if (!isInteractiveElement(element)) {
-    return false;
-  }
-
   return true;
 };
 
