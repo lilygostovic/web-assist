@@ -83,7 +83,7 @@ export type PrevTurn =
 export type ResponseBody = {
   intent: string;
   args: { [key: string]: any };
-  element: null | string;
+  element: any;
 };
 
 export type ErrorBody = {

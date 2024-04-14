@@ -55,7 +55,12 @@ const ensureElement = (element) => {
 };
 
 const getElementByUID = (uidKey, uid) => {
-  return document.querySelector(`[${uidKey}="${uid}"]`);
+  const element = document.querySelector(`[${uidKey}="${uid}"]`);
+
+  element.style.border = "2px solid red";
+  element.style.backgroundColor = "yellow";
+
+  return element;
 };
 
 // Browser Helper Functions
@@ -158,6 +163,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     sendResponse(retrieveHTML());
   }
 
+  // TODO: for browser actions with elements, return proper info if found or error.
   if (message.intent === "change") {
     sendResponse(_change(message.uidKey, message.uid, message.value));
   }

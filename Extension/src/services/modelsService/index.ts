@@ -124,9 +124,6 @@ export const performAction = async (
       setPrevTurn(message);
       break;
     case "click":
-      InfoToast({
-        message: `Clicking with args: ${JSON.stringify(args)}}`,
-      });
       await chrome.tabs.sendMessage(tabId, {
         intent: intent,
         uidKey: uidKey,
@@ -134,7 +131,7 @@ export const performAction = async (
       });
       setPrevTurn({
         intent: intent,
-        element: args.element,
+        element: element,
       });
       break;
     case "submit":
@@ -145,7 +142,7 @@ export const performAction = async (
       });
       setPrevTurn({
         intent: intent,
-        element: args.element,
+        element: element,
       });
       break;
     case "change":
@@ -156,7 +153,7 @@ export const performAction = async (
       });
       setPrevTurn({
         intent: intent,
-        element: args.element,
+        element: element,
       });
       break;
     case "textinput":
@@ -168,7 +165,7 @@ export const performAction = async (
       });
       setPrevTurn({
         intent: intent,
-        element: args.element,
+        element: element,
       });
       break;
   }
