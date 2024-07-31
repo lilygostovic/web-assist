@@ -17,7 +17,7 @@ export const ChatScreen = ({ model, modelSetter }: ChatScreenProps) => {
   const [history, setHistory] = useState<ChatMessage[]>([]);
   const [modelIsTyping, setModelIsTyping] = useState(false);
   const [sessionID, setSessionID] = useState(generateSessionID()); // Initialize sessionID once
-  const uidKey = "web-assist-id";
+  const uidKey = "data-webtasks-id";
   const [prevTurn, setPrevTurn] = useState<null | PrevTurn>(null);
 
   return (
